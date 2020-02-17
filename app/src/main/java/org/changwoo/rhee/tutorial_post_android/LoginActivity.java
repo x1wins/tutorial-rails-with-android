@@ -29,8 +29,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import io.swagger.client.ApiCallback;
+import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
+import io.swagger.client.Configuration;
 import io.swagger.client.api.AuthenticationApi;
+import io.swagger.client.api.PostApi;
+import io.swagger.client.auth.ApiKeyAuth;
+import io.swagger.client.model.Post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -312,30 +317,49 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            AuthenticationApi apiInstance = new AuthenticationApi();
-            Object body = null; // Object |
+            ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: Bearer
+            ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
+            Bearer.setApiKey("eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1ODIwNTM4Nzl9.dh2XznI9j0eTF_vdQ6FkI1PPauvzCbf8QkX0iy5utuY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//Bearer.setApiKeyPrefix("Token");
+
+            PostApi apiInstance = new PostApi();
+            String authorization = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1ODIwNTM4Nzl9.dh2XznI9j0eTF_vdQ6FkI1PPauvzCbf8QkX0iy5utuY"; // String | JWT token for Authorization
+            Integer categoryId = 1; // Integer | Category Id
+            Integer page = 1; // Integer | Page number
+            Integer per = 10; // Integer | Per page number
+            Integer commentPage = 1; // Integer | Page number for Comment
+            Integer commentPer = 10; // Integer | Per page number For Comment
+            String search = null; // String | Search Keyword
             try {
-                apiInstance.apiV1AuthLoginPostAsync(body, new ApiCallback()<Map<String, String>>{
+                com.squareup.okhttp.Call call = apiInstance.apiV1PostsGetAsync(authorization, categoryId, page, per, commentPage, commentPer, search, new ApiCallback<Post>() {
                     @Override
-                    void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders){
+                    public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
 
                     }
+
                     @Override
-                    void onSuccess(T result, int statusCode, Map<String, List<String>> responseHeaders){
+                    public void onSuccess(Post result, int statusCode, Map<String, List<String>> responseHeaders) {
 
                     }
-                })
+
+                    @Override
+                    public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
+
+                    }
+
+                    @Override
+                    public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
+
+                    }
+                });
+                Post result = apiInstance.apiV1PostsGet(authorization, categoryId, page, per, commentPage, commentPer, search);
+                System.out.println(result);
             } catch (ApiException e) {
-                System.err.println("Exception when calling AuthenticationApi#apiV1AuthLoginPost");
+                System.err.println("Exception when calling PostApi#apiV1PostsGet");
                 e.printStackTrace();
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
             }
 
             // TODO: register the new account here.
