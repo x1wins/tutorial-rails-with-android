@@ -35,3 +35,8 @@ TODO
     - [ ] update
     - [ ] destroy
     
+    
+docker-compose run --no-deps web bundle exec rake rswag
+swagger-codegen generate -i http://localhost:3000/api-docs/v1/swagger.yaml -l java -o ./java
+swagger-codegen generate -i http://localhost:3000/api-docs/v1/swagger.yaml -l java -o ./app
+    
