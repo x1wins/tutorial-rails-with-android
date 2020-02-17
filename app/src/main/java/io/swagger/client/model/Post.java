@@ -25,7 +25,7 @@ import java.io.IOException;
  * Post
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2020-02-17T11:08:07.100-08:00[America/Los_Angeles]")
+
 public class Post {
   @SerializedName("id")
   private Integer id = null;

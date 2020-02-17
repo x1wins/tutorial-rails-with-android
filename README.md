@@ -38,5 +38,10 @@ TODO
     
 docker-compose run --no-deps web bundle exec rake rswag
 swagger-codegen generate -i http://localhost:3000/api-docs/v1/swagger.yaml -l java -o ./java
-swagger-codegen generate -i http://localhost:3000/api-docs/v1/swagger.yaml -l java -o ./app
-    
+swagger-codegen generate -i http://localhost:3000/api-docs/v1/swagger.yaml -l java -o ./java -D hideGenerationTimestamp=true
+
+java -jar modules/swagger-codegen-cli/target/swagger-codegen-cli.jar generate \
+  -i http://petstore.swagger.io/v2/swagger.json \
+  -l java --library=okhttp-gson \
+  -D hideGenerationTimestamp=true \
+  -o /var/tmp/java/okhttp-gson/ 
