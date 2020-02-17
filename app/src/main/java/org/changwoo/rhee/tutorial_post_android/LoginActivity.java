@@ -28,9 +28,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import io.swagger.client.ApiCallback;
+import io.swagger.client.ApiException;
+import io.swagger.client.api.AuthenticationApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -308,11 +312,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            AuthenticationApi apiInstance = new AuthenticationApi();
+            Object body = null; // Object |
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                apiInstance.apiV1AuthLoginPostAsync(body, new ApiCallback()<Map<String, String>>{
+                    @Override
+                    void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders){
+
+                    }
+                    @Override
+                    void onSuccess(T result, int statusCode, Map<String, List<String>> responseHeaders){
+
+                    }
+                })
+            } catch (ApiException e) {
+                System.err.println("Exception when calling AuthenticationApi#apiV1AuthLoginPost");
+                e.printStackTrace();
             }
 
             for (String credential : DUMMY_CREDENTIALS) {
