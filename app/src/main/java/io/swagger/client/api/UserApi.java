@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import io.swagger.client.model.UserParam;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -188,7 +189,7 @@ public class UserApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call apiV1UsersPostCall(Object body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call apiV1UsersPostCall(UserParam body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = body;
         
         // create path and map variables
@@ -230,7 +231,7 @@ public class UserApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call apiV1UsersPostValidateBeforeCall(Object body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call apiV1UsersPostValidateBeforeCall(UserParam body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new ApiException("Missing the required parameter 'body' when calling apiV1UsersPost(Async)");
@@ -251,7 +252,7 @@ public class UserApi {
      * @param body  (required)
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1UsersPost(Object body) throws ApiException {
+    public void apiV1UsersPost(UserParam body) throws ApiException {
         apiV1UsersPostWithHttpInfo(body);
     }
 
@@ -262,7 +263,7 @@ public class UserApi {
      * @return ApiResponse&lt;Void&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1UsersPostWithHttpInfo(Object body) throws ApiException {
+    public ApiResponse<Void> apiV1UsersPostWithHttpInfo(UserParam body) throws ApiException {
         com.squareup.okhttp.Call call = apiV1UsersPostValidateBeforeCall(body, null, null);
         return apiClient.execute(call);
     }
@@ -275,7 +276,7 @@ public class UserApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1UsersPostAsync(Object body, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1UsersPostAsync(UserParam body, final ApiCallback<Void> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;

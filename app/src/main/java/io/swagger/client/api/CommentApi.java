@@ -27,6 +27,7 @@ import java.io.IOException;
 
 
 import io.swagger.client.model.Comment;
+import io.swagger.client.model.CommentParam;
 import io.swagger.client.model.Comments;
 
 import java.lang.reflect.Type;
@@ -462,7 +463,7 @@ public class CommentApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsIdPutCall(Object body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsIdPutCall(CommentParam body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = body;
         
         // create path and map variables
@@ -507,7 +508,7 @@ public class CommentApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call apiV1CommentsIdPutValidateBeforeCall(Object body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call apiV1CommentsIdPutValidateBeforeCall(CommentParam body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new ApiException("Missing the required parameter 'body' when calling apiV1CommentsIdPut(Async)");
@@ -535,7 +536,7 @@ public class CommentApi {
      * @return Comment
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Comment apiV1CommentsIdPut(Object body, String id, String authorization) throws ApiException {
+    public Comment apiV1CommentsIdPut(CommentParam body, String id, String authorization) throws ApiException {
         ApiResponse<Comment> resp = apiV1CommentsIdPutWithHttpInfo(body, id, authorization);
         return resp.getData();
     }
@@ -549,7 +550,7 @@ public class CommentApi {
      * @return ApiResponse&lt;Comment&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Comment> apiV1CommentsIdPutWithHttpInfo(Object body, String id, String authorization) throws ApiException {
+    public ApiResponse<Comment> apiV1CommentsIdPutWithHttpInfo(CommentParam body, String id, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CommentsIdPutValidateBeforeCall(body, id, authorization, null, null);
         Type localVarReturnType = new TypeToken<Comment>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
@@ -565,7 +566,7 @@ public class CommentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsIdPutAsync(Object body, String id, String authorization, final ApiCallback<Comment> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsIdPutAsync(CommentParam body, String id, String authorization, final ApiCallback<Comment> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -600,7 +601,7 @@ public class CommentApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsPostCall(Object body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsPostCall(CommentParam body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = body;
         
         // create path and map variables
@@ -644,7 +645,7 @@ public class CommentApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call apiV1CommentsPostValidateBeforeCall(Object body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call apiV1CommentsPostValidateBeforeCall(CommentParam body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new ApiException("Missing the required parameter 'body' when calling apiV1CommentsPost(Async)");
@@ -667,7 +668,7 @@ public class CommentApi {
      * @return Comment
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Comment apiV1CommentsPost(Object body, String authorization) throws ApiException {
+    public Comment apiV1CommentsPost(CommentParam body, String authorization) throws ApiException {
         ApiResponse<Comment> resp = apiV1CommentsPostWithHttpInfo(body, authorization);
         return resp.getData();
     }
@@ -680,7 +681,7 @@ public class CommentApi {
      * @return ApiResponse&lt;Comment&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Comment> apiV1CommentsPostWithHttpInfo(Object body, String authorization) throws ApiException {
+    public ApiResponse<Comment> apiV1CommentsPostWithHttpInfo(CommentParam body, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CommentsPostValidateBeforeCall(body, authorization, null, null);
         Type localVarReturnType = new TypeToken<Comment>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
@@ -695,7 +696,7 @@ public class CommentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsPostAsync(Object body, String authorization, final ApiCallback<Comment> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsPostAsync(CommentParam body, String authorization, final ApiCallback<Comment> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
