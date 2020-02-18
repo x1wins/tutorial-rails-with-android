@@ -19,8 +19,14 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.swagger.client.model.Category;
+import io.swagger.client.model.Comment;
+import io.swagger.client.model.Pagination;
+import io.swagger.client.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Post
  */
@@ -36,8 +42,20 @@ public class Post {
   @SerializedName("body")
   private String body = null;
 
+  @SerializedName("user")
+  private User user = null;
+
   @SerializedName("category")
-  private Object category = null;
+  private Category category = null;
+
+  @SerializedName("files")
+  private List<Object> files = null;
+
+  @SerializedName("comments")
+  private List<Comment> comments = null;
+
+  @SerializedName("comments_pagination")
+  private Pagination commentsPagination = null;
 
   public Post id(Integer id) {
     this.id = id;
@@ -93,7 +111,25 @@ public class Post {
     this.body = body;
   }
 
-  public Post category(Object category) {
+  public Post user(User user) {
+    this.user = user;
+    return this;
+  }
+
+   /**
+   * Get user
+   * @return user
+  **/
+  @Schema(description = "")
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public Post category(Category category) {
     this.category = category;
     return this;
   }
@@ -103,17 +139,87 @@ public class Post {
    * @return category
   **/
   @Schema(description = "")
-  public Object getCategory() {
+  public Category getCategory() {
     return category;
   }
 
-  public void setCategory(Object category) {
+  public void setCategory(Category category) {
     this.category = category;
+  }
+
+  public Post files(List<Object> files) {
+    this.files = files;
+    return this;
+  }
+
+  public Post addFilesItem(Object filesItem) {
+    if (this.files == null) {
+      this.files = new ArrayList<Object>();
+    }
+    this.files.add(filesItem);
+    return this;
+  }
+
+   /**
+   * Get files
+   * @return files
+  **/
+  @Schema(description = "")
+  public List<Object> getFiles() {
+    return files;
+  }
+
+  public void setFiles(List<Object> files) {
+    this.files = files;
+  }
+
+  public Post comments(List<Comment> comments) {
+    this.comments = comments;
+    return this;
+  }
+
+  public Post addCommentsItem(Comment commentsItem) {
+    if (this.comments == null) {
+      this.comments = new ArrayList<Comment>();
+    }
+    this.comments.add(commentsItem);
+    return this;
+  }
+
+   /**
+   * Get comments
+   * @return comments
+  **/
+  @Schema(description = "")
+  public List<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(List<Comment> comments) {
+    this.comments = comments;
+  }
+
+  public Post commentsPagination(Pagination commentsPagination) {
+    this.commentsPagination = commentsPagination;
+    return this;
+  }
+
+   /**
+   * Get commentsPagination
+   * @return commentsPagination
+  **/
+  @Schema(description = "")
+  public Pagination getCommentsPagination() {
+    return commentsPagination;
+  }
+
+  public void setCommentsPagination(Pagination commentsPagination) {
+    this.commentsPagination = commentsPagination;
   }
 
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(java.lang.Object o) {
     if (this == o) {
       return true;
     }
@@ -124,12 +230,16 @@ public class Post {
     return Objects.equals(this.id, post.id) &&
         Objects.equals(this.title, post.title) &&
         Objects.equals(this.body, post.body) &&
-        Objects.equals(this.category, post.category);
+        Objects.equals(this.user, post.user) &&
+        Objects.equals(this.category, post.category) &&
+        Objects.equals(this.files, post.files) &&
+        Objects.equals(this.comments, post.comments) &&
+        Objects.equals(this.commentsPagination, post.commentsPagination);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, body, category);
+    return Objects.hash(id, title, body, user, category, files, comments, commentsPagination);
   }
 
 
@@ -141,7 +251,11 @@ public class Post {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    body: ").append(toIndentedString(body)).append("\n");
+    sb.append("    user: ").append(toIndentedString(user)).append("\n");
     sb.append("    category: ").append(toIndentedString(category)).append("\n");
+    sb.append("    files: ").append(toIndentedString(files)).append("\n");
+    sb.append("    comments: ").append(toIndentedString(comments)).append("\n");
+    sb.append("    commentsPagination: ").append(toIndentedString(commentsPagination)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -150,7 +264,7 @@ public class Post {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(Object o) {
+  private String toIndentedString(java.lang.Object o) {
     if (o == null) {
       return "null";
     }

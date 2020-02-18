@@ -26,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import io.swagger.client.model.Auth;
+import io.swagger.client.model.AuthParam;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class AuthenticationApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call apiV1AuthLoginPostCall(Object body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call apiV1AuthLoginPostCall(AuthParam body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = body;
         
         // create path and map variables
@@ -74,7 +76,7 @@ public class AuthenticationApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "*/*"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -102,7 +104,7 @@ public class AuthenticationApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call apiV1AuthLoginPostValidateBeforeCall(Object body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call apiV1AuthLoginPostValidateBeforeCall(AuthParam body, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new ApiException("Missing the required parameter 'body' when calling apiV1AuthLoginPost(Async)");
@@ -121,22 +123,25 @@ public class AuthenticationApi {
      * login authentication
      * 
      * @param body  (required)
+     * @return Auth
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1AuthLoginPost(Object body) throws ApiException {
-        apiV1AuthLoginPostWithHttpInfo(body);
+    public Auth apiV1AuthLoginPost(AuthParam body) throws ApiException {
+        ApiResponse<Auth> resp = apiV1AuthLoginPostWithHttpInfo(body);
+        return resp.getData();
     }
 
     /**
      * login authentication
      * 
      * @param body  (required)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Auth&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1AuthLoginPostWithHttpInfo(Object body) throws ApiException {
+    public ApiResponse<Auth> apiV1AuthLoginPostWithHttpInfo(AuthParam body) throws ApiException {
         com.squareup.okhttp.Call call = apiV1AuthLoginPostValidateBeforeCall(body, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Auth>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -147,7 +152,7 @@ public class AuthenticationApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1AuthLoginPostAsync(Object body, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1AuthLoginPostAsync(AuthParam body, final ApiCallback<Auth> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -169,7 +174,8 @@ public class AuthenticationApi {
         }
 
         com.squareup.okhttp.Call call = apiV1AuthLoginPostValidateBeforeCall(body, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Auth>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
 }

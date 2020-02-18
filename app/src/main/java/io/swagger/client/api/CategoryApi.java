@@ -26,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import io.swagger.client.model.Categories;
+import io.swagger.client.model.Category;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -88,7 +90,7 @@ public class CategoryApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -135,10 +137,12 @@ public class CategoryApi {
      * @param per Per page number (optional)
      * @param postPage Page number for Post (optional)
      * @param postPer Per page number For Post (optional)
+     * @return Categories
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CategoriesGet(String authorization, Integer page, Integer per, Integer postPage, Integer postPer) throws ApiException {
-        apiV1CategoriesGetWithHttpInfo(authorization, page, per, postPage, postPer);
+    public Categories apiV1CategoriesGet(String authorization, Integer page, Integer per, Integer postPage, Integer postPer) throws ApiException {
+        ApiResponse<Categories> resp = apiV1CategoriesGetWithHttpInfo(authorization, page, per, postPage, postPer);
+        return resp.getData();
     }
 
     /**
@@ -149,12 +153,13 @@ public class CategoryApi {
      * @param per Per page number (optional)
      * @param postPage Page number for Post (optional)
      * @param postPer Per page number For Post (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Categories&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CategoriesGetWithHttpInfo(String authorization, Integer page, Integer per, Integer postPage, Integer postPer) throws ApiException {
+    public ApiResponse<Categories> apiV1CategoriesGetWithHttpInfo(String authorization, Integer page, Integer per, Integer postPage, Integer postPer) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CategoriesGetValidateBeforeCall(authorization, page, per, postPage, postPer, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Categories>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -169,7 +174,7 @@ public class CategoryApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CategoriesGetAsync(String authorization, Integer page, Integer per, Integer postPage, Integer postPer, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CategoriesGetAsync(String authorization, Integer page, Integer per, Integer postPage, Integer postPer, final ApiCallback<Categories> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -191,7 +196,8 @@ public class CategoryApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CategoriesGetValidateBeforeCall(authorization, page, per, postPage, postPer, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Categories>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -353,7 +359,7 @@ public class CategoryApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -403,10 +409,12 @@ public class CategoryApi {
      * @param authorization JWT token for Authorization (optional)
      * @param postPage Page number for Post (optional)
      * @param postPer Per page number For Post (optional)
+     * @return Category
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CategoriesIdGet(String id, String authorization, Integer postPage, Integer postPer) throws ApiException {
-        apiV1CategoriesIdGetWithHttpInfo(id, authorization, postPage, postPer);
+    public Category apiV1CategoriesIdGet(String id, String authorization, Integer postPage, Integer postPer) throws ApiException {
+        ApiResponse<Category> resp = apiV1CategoriesIdGetWithHttpInfo(id, authorization, postPage, postPer);
+        return resp.getData();
     }
 
     /**
@@ -416,12 +424,13 @@ public class CategoryApi {
      * @param authorization JWT token for Authorization (optional)
      * @param postPage Page number for Post (optional)
      * @param postPer Per page number For Post (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Category&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CategoriesIdGetWithHttpInfo(String id, String authorization, Integer postPage, Integer postPer) throws ApiException {
+    public ApiResponse<Category> apiV1CategoriesIdGetWithHttpInfo(String id, String authorization, Integer postPage, Integer postPer) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CategoriesIdGetValidateBeforeCall(id, authorization, postPage, postPer, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Category>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -435,7 +444,7 @@ public class CategoryApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CategoriesIdGetAsync(String id, String authorization, Integer postPage, Integer postPer, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CategoriesIdGetAsync(String id, String authorization, Integer postPage, Integer postPer, final ApiCallback<Category> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -457,7 +466,8 @@ public class CategoryApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CategoriesIdGetValidateBeforeCall(id, authorization, postPage, postPer, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Category>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -487,7 +497,7 @@ public class CategoryApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -540,10 +550,12 @@ public class CategoryApi {
      * @param body  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Category
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CategoriesIdPut(Object body, String id, String authorization) throws ApiException {
-        apiV1CategoriesIdPutWithHttpInfo(body, id, authorization);
+    public Category apiV1CategoriesIdPut(Object body, String id, String authorization) throws ApiException {
+        ApiResponse<Category> resp = apiV1CategoriesIdPutWithHttpInfo(body, id, authorization);
+        return resp.getData();
     }
 
     /**
@@ -552,12 +564,13 @@ public class CategoryApi {
      * @param body  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Category&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CategoriesIdPutWithHttpInfo(Object body, String id, String authorization) throws ApiException {
+    public ApiResponse<Category> apiV1CategoriesIdPutWithHttpInfo(Object body, String id, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CategoriesIdPutValidateBeforeCall(body, id, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Category>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -570,7 +583,7 @@ public class CategoryApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CategoriesIdPutAsync(Object body, String id, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CategoriesIdPutAsync(Object body, String id, String authorization, final ApiCallback<Category> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -592,7 +605,8 @@ public class CategoryApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CategoriesIdPutValidateBeforeCall(body, id, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Category>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -620,7 +634,7 @@ public class CategoryApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -668,10 +682,12 @@ public class CategoryApi {
      * 
      * @param body  (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Category
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CategoriesPost(Object body, String authorization) throws ApiException {
-        apiV1CategoriesPostWithHttpInfo(body, authorization);
+    public Category apiV1CategoriesPost(Object body, String authorization) throws ApiException {
+        ApiResponse<Category> resp = apiV1CategoriesPostWithHttpInfo(body, authorization);
+        return resp.getData();
     }
 
     /**
@@ -679,12 +695,13 @@ public class CategoryApi {
      * 
      * @param body  (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Category&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CategoriesPostWithHttpInfo(Object body, String authorization) throws ApiException {
+    public ApiResponse<Category> apiV1CategoriesPostWithHttpInfo(Object body, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CategoriesPostValidateBeforeCall(body, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Category>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -696,7 +713,7 @@ public class CategoryApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CategoriesPostAsync(Object body, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CategoriesPostAsync(Object body, String authorization, final ApiCallback<Category> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -718,7 +735,8 @@ public class CategoryApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CategoriesPostValidateBeforeCall(body, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Category>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
 }
