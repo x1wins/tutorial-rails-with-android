@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,11 +36,14 @@ import io.swagger.client.Configuration;
 import io.swagger.client.api.AuthenticationApi;
 import io.swagger.client.api.PostApi;
 import io.swagger.client.auth.ApiKeyAuth;
+import io.swagger.client.model.Auth;
+import io.swagger.client.model.AuthParam;
 import io.swagger.client.model.Post;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -101,6 +105,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mEmailView.setText("hello@changwoo.org");
+        mPasswordView.setText("hello1234");
     }
 
     private void populateAutoComplete() {
@@ -303,7 +310,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Auth> {
 
         private final String mEmail;
         private final String mPassword;
@@ -314,68 +321,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            ApiClient defaultClient = Configuration.getDefaultApiClient();
-
-// Configure API key authorization: Bearer
-            ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
-            Bearer.setApiKey("eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1ODIwNTM4Nzl9.dh2XznI9j0eTF_vdQ6FkI1PPauvzCbf8QkX0iy5utuY");
-// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
-//Bearer.setApiKeyPrefix("Token");
-
-            PostApi apiInstance = new PostApi();
-            String authorization = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1ODIwNTM4Nzl9.dh2XznI9j0eTF_vdQ6FkI1PPauvzCbf8QkX0iy5utuY"; // String | JWT token for Authorization
-            Integer categoryId = 1; // Integer | Category Id
-            Integer page = 1; // Integer | Page number
-            Integer per = 10; // Integer | Per page number
-            Integer commentPage = 1; // Integer | Page number for Comment
-            Integer commentPer = 10; // Integer | Per page number For Comment
-            String search = null; // String | Search Keyword
+        protected Auth doInBackground(Void... params) {
+            AuthenticationApi apiInstance = new AuthenticationApi();
+            AuthParam body = new AuthParam(); // AuthParam |
+            body.setEmail(mEmail);
+            body.setPassword(mPassword);
+            Auth result = null;
             try {
-                com.squareup.okhttp.Call call = apiInstance.apiV1PostsGetAsync(authorization, categoryId, page, per, commentPage, commentPer, search, new ApiCallback<Post>() {
-                    @Override
-                    public void onFailure(ApiException e, int statusCode, Map<String, List<String>> responseHeaders) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(Post result, int statusCode, Map<String, List<String>> responseHeaders) {
-
-                    }
-
-                    @Override
-                    public void onUploadProgress(long bytesWritten, long contentLength, boolean done) {
-
-                    }
-
-                    @Override
-                    public void onDownloadProgress(long bytesRead, long contentLength, boolean done) {
-
-                    }
-                });
-                Post result = apiInstance.apiV1PostsGet(authorization, categoryId, page, per, commentPage, commentPer, search);
+                result = apiInstance.apiV1AuthLoginPost(body);
                 System.out.println(result);
             } catch (ApiException e) {
-                System.err.println("Exception when calling PostApi#apiV1PostsGet");
                 e.printStackTrace();
             }
-
-            // TODO: register the new account here.
-            return true;
+            return result;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Auth auth) {
             mAuthTask = null;
             showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+            if(auth != null){
+                System.out.println(auth.toString());
             }
         }
 

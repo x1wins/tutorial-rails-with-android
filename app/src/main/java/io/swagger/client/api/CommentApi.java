@@ -26,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 
 
+import io.swagger.client.model.Comment;
+import io.swagger.client.model.Comments;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -85,7 +87,7 @@ public class CommentApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -131,10 +133,12 @@ public class CommentApi {
      * @param postId Post Id (optional)
      * @param page Page number (optional)
      * @param per Per page number (optional)
+     * @return Comments
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CommentsGet(String authorization, Integer postId, Integer page, Integer per) throws ApiException {
-        apiV1CommentsGetWithHttpInfo(authorization, postId, page, per);
+    public Comments apiV1CommentsGet(String authorization, Integer postId, Integer page, Integer per) throws ApiException {
+        ApiResponse<Comments> resp = apiV1CommentsGetWithHttpInfo(authorization, postId, page, per);
+        return resp.getData();
     }
 
     /**
@@ -144,12 +148,13 @@ public class CommentApi {
      * @param postId Post Id (optional)
      * @param page Page number (optional)
      * @param per Per page number (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Comments&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CommentsGetWithHttpInfo(String authorization, Integer postId, Integer page, Integer per) throws ApiException {
+    public ApiResponse<Comments> apiV1CommentsGetWithHttpInfo(String authorization, Integer postId, Integer page, Integer per) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CommentsGetValidateBeforeCall(authorization, postId, page, per, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Comments>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -163,7 +168,7 @@ public class CommentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsGetAsync(String authorization, Integer postId, Integer page, Integer per, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsGetAsync(String authorization, Integer postId, Integer page, Integer per, final ApiCallback<Comments> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -185,7 +190,8 @@ public class CommentApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CommentsGetValidateBeforeCall(authorization, postId, page, per, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Comments>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -341,7 +347,7 @@ public class CommentApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -389,10 +395,12 @@ public class CommentApi {
      * 
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Comment
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CommentsIdGet(String id, String authorization) throws ApiException {
-        apiV1CommentsIdGetWithHttpInfo(id, authorization);
+    public Comment apiV1CommentsIdGet(String id, String authorization) throws ApiException {
+        ApiResponse<Comment> resp = apiV1CommentsIdGetWithHttpInfo(id, authorization);
+        return resp.getData();
     }
 
     /**
@@ -400,12 +408,13 @@ public class CommentApi {
      * 
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Comment&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CommentsIdGetWithHttpInfo(String id, String authorization) throws ApiException {
+    public ApiResponse<Comment> apiV1CommentsIdGetWithHttpInfo(String id, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CommentsIdGetValidateBeforeCall(id, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Comment>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -417,7 +426,7 @@ public class CommentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsIdGetAsync(String id, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsIdGetAsync(String id, String authorization, final ApiCallback<Comment> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -439,7 +448,8 @@ public class CommentApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CommentsIdGetValidateBeforeCall(id, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Comment>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -469,7 +479,7 @@ public class CommentApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -522,10 +532,12 @@ public class CommentApi {
      * @param body  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Comment
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CommentsIdPut(Object body, String id, String authorization) throws ApiException {
-        apiV1CommentsIdPutWithHttpInfo(body, id, authorization);
+    public Comment apiV1CommentsIdPut(Object body, String id, String authorization) throws ApiException {
+        ApiResponse<Comment> resp = apiV1CommentsIdPutWithHttpInfo(body, id, authorization);
+        return resp.getData();
     }
 
     /**
@@ -534,12 +546,13 @@ public class CommentApi {
      * @param body  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Comment&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CommentsIdPutWithHttpInfo(Object body, String id, String authorization) throws ApiException {
+    public ApiResponse<Comment> apiV1CommentsIdPutWithHttpInfo(Object body, String id, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CommentsIdPutValidateBeforeCall(body, id, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Comment>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -552,7 +565,7 @@ public class CommentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsIdPutAsync(Object body, String id, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsIdPutAsync(Object body, String id, String authorization, final ApiCallback<Comment> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -574,7 +587,8 @@ public class CommentApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CommentsIdPutValidateBeforeCall(body, id, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Comment>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -602,7 +616,7 @@ public class CommentApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -650,10 +664,12 @@ public class CommentApi {
      * 
      * @param body  (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Comment
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1CommentsPost(Object body, String authorization) throws ApiException {
-        apiV1CommentsPostWithHttpInfo(body, authorization);
+    public Comment apiV1CommentsPost(Object body, String authorization) throws ApiException {
+        ApiResponse<Comment> resp = apiV1CommentsPostWithHttpInfo(body, authorization);
+        return resp.getData();
     }
 
     /**
@@ -661,12 +677,13 @@ public class CommentApi {
      * 
      * @param body  (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Comment&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1CommentsPostWithHttpInfo(Object body, String authorization) throws ApiException {
+    public ApiResponse<Comment> apiV1CommentsPostWithHttpInfo(Object body, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1CommentsPostValidateBeforeCall(body, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Comment>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -678,7 +695,7 @@ public class CommentApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1CommentsPostAsync(Object body, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1CommentsPostAsync(Object body, String authorization, final ApiCallback<Comment> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -700,7 +717,8 @@ public class CommentApi {
         }
 
         com.squareup.okhttp.Call call = apiV1CommentsPostValidateBeforeCall(body, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Comment>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
 }

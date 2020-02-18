@@ -27,6 +27,8 @@ import java.io.IOException;
 
 
 import io.swagger.client.model.Post;
+import io.swagger.client.model.PostParam;
+import io.swagger.client.model.Posts;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -144,11 +146,11 @@ public class PostApi {
      * @param commentPage Page number for Comment (optional)
      * @param commentPer Per page number For Comment (optional)
      * @param search Search Keyword (optional)
-     * @return Post
+     * @return Posts
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public Post apiV1PostsGet(String authorization, Integer categoryId, Integer page, Integer per, Integer commentPage, Integer commentPer, String search) throws ApiException {
-        ApiResponse<Post> resp = apiV1PostsGetWithHttpInfo(authorization, categoryId, page, per, commentPage, commentPer, search);
+    public Posts apiV1PostsGet(String authorization, Integer categoryId, Integer page, Integer per, Integer commentPage, Integer commentPer, String search) throws ApiException {
+        ApiResponse<Posts> resp = apiV1PostsGetWithHttpInfo(authorization, categoryId, page, per, commentPage, commentPer, search);
         return resp.getData();
     }
 
@@ -162,12 +164,12 @@ public class PostApi {
      * @param commentPage Page number for Comment (optional)
      * @param commentPer Per page number For Comment (optional)
      * @param search Search Keyword (optional)
-     * @return ApiResponse&lt;Post&gt;
+     * @return ApiResponse&lt;Posts&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Post> apiV1PostsGetWithHttpInfo(String authorization, Integer categoryId, Integer page, Integer per, Integer commentPage, Integer commentPer, String search) throws ApiException {
+    public ApiResponse<Posts> apiV1PostsGetWithHttpInfo(String authorization, Integer categoryId, Integer page, Integer per, Integer commentPage, Integer commentPer, String search) throws ApiException {
         com.squareup.okhttp.Call call = apiV1PostsGetValidateBeforeCall(authorization, categoryId, page, per, commentPage, commentPer, search, null, null);
-        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        Type localVarReturnType = new TypeToken<Posts>(){}.getType();
         return apiClient.execute(call, localVarReturnType);
     }
 
@@ -185,7 +187,7 @@ public class PostApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsGetAsync(String authorization, Integer categoryId, Integer page, Integer per, Integer commentPage, Integer commentPer, String search, final ApiCallback<Post> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsGetAsync(String authorization, Integer categoryId, Integer page, Integer per, Integer commentPage, Integer commentPer, String search, final ApiCallback<Posts> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -207,7 +209,7 @@ public class PostApi {
         }
 
         com.squareup.okhttp.Call call = apiV1PostsGetValidateBeforeCall(authorization, categoryId, page, per, commentPage, commentPer, search, progressListener, progressRequestListener);
-        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        Type localVarReturnType = new TypeToken<Posts>(){}.getType();
         apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
@@ -491,7 +493,7 @@ public class PostApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsIdPutCall(Object body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsIdPutCall(PostParam body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = body;
         
         // create path and map variables
@@ -508,7 +510,7 @@ public class PostApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -536,7 +538,7 @@ public class PostApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call apiV1PostsIdPutValidateBeforeCall(Object body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call apiV1PostsIdPutValidateBeforeCall(PostParam body, String id, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new ApiException("Missing the required parameter 'body' when calling apiV1PostsIdPut(Async)");
@@ -561,10 +563,12 @@ public class PostApi {
      * @param body  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Post
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1PostsIdPut(Object body, String id, String authorization) throws ApiException {
-        apiV1PostsIdPutWithHttpInfo(body, id, authorization);
+    public Post apiV1PostsIdPut(PostParam body, String id, String authorization) throws ApiException {
+        ApiResponse<Post> resp = apiV1PostsIdPutWithHttpInfo(body, id, authorization);
+        return resp.getData();
     }
 
     /**
@@ -573,12 +577,13 @@ public class PostApi {
      * @param body  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Post&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1PostsIdPutWithHttpInfo(Object body, String id, String authorization) throws ApiException {
+    public ApiResponse<Post> apiV1PostsIdPutWithHttpInfo(PostParam body, String id, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1PostsIdPutValidateBeforeCall(body, id, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -591,7 +596,7 @@ public class PostApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsIdPutAsync(Object body, String id, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsIdPutAsync(PostParam body, String id, String authorization, final ApiCallback<Post> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -613,7 +618,8 @@ public class PostApi {
         }
 
         com.squareup.okhttp.Call call = apiV1PostsIdPutValidateBeforeCall(body, id, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -625,7 +631,7 @@ public class PostApi {
      * @return Call to execute
      * @throws ApiException If fail to serialize the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsPostCall(Object body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsPostCall(PostParam body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         Object localVarPostBody = body;
         
         // create path and map variables
@@ -641,7 +647,7 @@ public class PostApi {
         Map<String, Object> localVarFormParams = new HashMap<String, Object>();
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -669,7 +675,7 @@ public class PostApi {
     }
     
     @SuppressWarnings("rawtypes")
-    private com.squareup.okhttp.Call apiV1PostsPostValidateBeforeCall(Object body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
+    private com.squareup.okhttp.Call apiV1PostsPostValidateBeforeCall(PostParam body, String authorization, final ProgressResponseBody.ProgressListener progressListener, final ProgressRequestBody.ProgressRequestListener progressRequestListener) throws ApiException {
         // verify the required parameter 'body' is set
         if (body == null) {
             throw new ApiException("Missing the required parameter 'body' when calling apiV1PostsPost(Async)");
@@ -689,10 +695,12 @@ public class PostApi {
      * 
      * @param body  (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Post
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1PostsPost(Object body, String authorization) throws ApiException {
-        apiV1PostsPostWithHttpInfo(body, authorization);
+    public Post apiV1PostsPost(PostParam body, String authorization) throws ApiException {
+        ApiResponse<Post> resp = apiV1PostsPostWithHttpInfo(body, authorization);
+        return resp.getData();
     }
 
     /**
@@ -700,12 +708,13 @@ public class PostApi {
      * 
      * @param body  (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Post&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1PostsPostWithHttpInfo(Object body, String authorization) throws ApiException {
+    public ApiResponse<Post> apiV1PostsPostWithHttpInfo(PostParam body, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1PostsPostValidateBeforeCall(body, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -717,7 +726,7 @@ public class PostApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsPostAsync(Object body, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsPostAsync(PostParam body, String authorization, final ApiCallback<Post> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -739,7 +748,8 @@ public class PostApi {
         }
 
         com.squareup.okhttp.Call call = apiV1PostsPostValidateBeforeCall(body, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
 }

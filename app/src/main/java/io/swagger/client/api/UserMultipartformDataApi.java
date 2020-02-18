@@ -27,6 +27,7 @@ import java.io.IOException;
 
 
 import java.io.File;
+import io.swagger.client.model.User;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class UserMultipartformDataApi {
         localVarFormParams.put("user[avatar]", userAvatar);
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -164,10 +165,12 @@ public class UserMultipartformDataApi {
      * @param userPassword  (required)
      * @param userPasswordConfirmation  (required)
      * @param userAvatar  (required)
+     * @return User
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1UsersPost(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar) throws ApiException {
-        apiV1UsersPostWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
+    public User apiV1UsersPost(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar) throws ApiException {
+        ApiResponse<User> resp = apiV1UsersPostWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
+        return resp.getData();
     }
 
     /**
@@ -179,12 +182,13 @@ public class UserMultipartformDataApi {
      * @param userPassword  (required)
      * @param userPasswordConfirmation  (required)
      * @param userAvatar  (required)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;User&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1UsersPostWithHttpInfo(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar) throws ApiException {
+    public ApiResponse<User> apiV1UsersPostWithHttpInfo(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar) throws ApiException {
         com.squareup.okhttp.Call call = apiV1UsersPostValidateBeforeCall(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<User>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -200,7 +204,7 @@ public class UserMultipartformDataApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1UsersPostAsync(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1UsersPostAsync(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, final ApiCallback<User> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -222,7 +226,8 @@ public class UserMultipartformDataApi {
         }
 
         com.squareup.okhttp.Call call = apiV1UsersPostValidateBeforeCall(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<User>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -269,7 +274,7 @@ public class UserMultipartformDataApi {
         localVarFormParams.put("user[avatar]", userAvatar);
 
         final String[] localVarAccepts = {
-            
+            "application/json"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -347,10 +352,12 @@ public class UserMultipartformDataApi {
      * @param userAvatar  (required)
      * @param _username username (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return User
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1UsersUsernamePut(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, Object _username, String authorization) throws ApiException {
-        apiV1UsersUsernamePutWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar, _username, authorization);
+    public User apiV1UsersUsernamePut(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, Object _username, String authorization) throws ApiException {
+        ApiResponse<User> resp = apiV1UsersUsernamePutWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar, _username, authorization);
+        return resp.getData();
     }
 
     /**
@@ -364,12 +371,13 @@ public class UserMultipartformDataApi {
      * @param userAvatar  (required)
      * @param _username username (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;User&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1UsersUsernamePutWithHttpInfo(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, Object _username, String authorization) throws ApiException {
+    public ApiResponse<User> apiV1UsersUsernamePutWithHttpInfo(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, Object _username, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1UsersUsernamePutValidateBeforeCall(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar, _username, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<User>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -387,7 +395,7 @@ public class UserMultipartformDataApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1UsersUsernamePutAsync(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, Object _username, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1UsersUsernamePutAsync(String userName, String userUsername, String userEmail, String userPassword, String userPasswordConfirmation, File userAvatar, Object _username, String authorization, final ApiCallback<User> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -409,7 +417,8 @@ public class UserMultipartformDataApi {
         }
 
         com.squareup.okhttp.Call call = apiV1UsersUsernamePutValidateBeforeCall(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar, _username, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<User>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
 }

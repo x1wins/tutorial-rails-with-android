@@ -27,6 +27,8 @@ import java.io.IOException;
 
 
 import java.io.File;
+import io.swagger.client.model.Post;
+import io.swagger.client.model.Posts;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -224,7 +226,7 @@ public class PostMultipartformDataApi {
         localVarFormParams.put("post[files]", postFiles);
 
         final String[] localVarAccepts = {
-            
+            "*/*"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -287,10 +289,12 @@ public class PostMultipartformDataApi {
      * @param postFiles  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Post
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1PostsIdPut(String postTitle, String postBody, File postFiles, String id, String authorization) throws ApiException {
-        apiV1PostsIdPutWithHttpInfo(postTitle, postBody, postFiles, id, authorization);
+    public Post apiV1PostsIdPut(String postTitle, String postBody, File postFiles, String id, String authorization) throws ApiException {
+        ApiResponse<Post> resp = apiV1PostsIdPutWithHttpInfo(postTitle, postBody, postFiles, id, authorization);
+        return resp.getData();
     }
 
     /**
@@ -301,12 +305,13 @@ public class PostMultipartformDataApi {
      * @param postFiles  (required)
      * @param id id (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Post&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1PostsIdPutWithHttpInfo(String postTitle, String postBody, File postFiles, String id, String authorization) throws ApiException {
+    public ApiResponse<Post> apiV1PostsIdPutWithHttpInfo(String postTitle, String postBody, File postFiles, String id, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1PostsIdPutValidateBeforeCall(postTitle, postBody, postFiles, id, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -321,7 +326,7 @@ public class PostMultipartformDataApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsIdPutAsync(String postTitle, String postBody, File postFiles, String id, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsIdPutAsync(String postTitle, String postBody, File postFiles, String id, String authorization, final ApiCallback<Post> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -343,7 +348,8 @@ public class PostMultipartformDataApi {
         }
 
         com.squareup.okhttp.Call call = apiV1PostsIdPutValidateBeforeCall(postTitle, postBody, postFiles, id, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Post>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
     /**
@@ -382,7 +388,7 @@ public class PostMultipartformDataApi {
         localVarFormParams.put("post[files]", postFiles);
 
         final String[] localVarAccepts = {
-            
+            "*/*"
         };
         final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
         if (localVarAccept != null) localVarHeaderParams.put("Accept", localVarAccept);
@@ -445,10 +451,12 @@ public class PostMultipartformDataApi {
      * @param postCategoryId  (required)
      * @param postFiles  (required)
      * @param authorization JWT token for Authorization (optional)
+     * @return Posts
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public void apiV1PostsPost(String postTitle, String postBody, Integer postCategoryId, File postFiles, String authorization) throws ApiException {
-        apiV1PostsPostWithHttpInfo(postTitle, postBody, postCategoryId, postFiles, authorization);
+    public Posts apiV1PostsPost(String postTitle, String postBody, Integer postCategoryId, File postFiles, String authorization) throws ApiException {
+        ApiResponse<Posts> resp = apiV1PostsPostWithHttpInfo(postTitle, postBody, postCategoryId, postFiles, authorization);
+        return resp.getData();
     }
 
     /**
@@ -459,12 +467,13 @@ public class PostMultipartformDataApi {
      * @param postCategoryId  (required)
      * @param postFiles  (required)
      * @param authorization JWT token for Authorization (optional)
-     * @return ApiResponse&lt;Void&gt;
+     * @return ApiResponse&lt;Posts&gt;
      * @throws ApiException If fail to call the API, e.g. server error or cannot deserialize the response body
      */
-    public ApiResponse<Void> apiV1PostsPostWithHttpInfo(String postTitle, String postBody, Integer postCategoryId, File postFiles, String authorization) throws ApiException {
+    public ApiResponse<Posts> apiV1PostsPostWithHttpInfo(String postTitle, String postBody, Integer postCategoryId, File postFiles, String authorization) throws ApiException {
         com.squareup.okhttp.Call call = apiV1PostsPostValidateBeforeCall(postTitle, postBody, postCategoryId, postFiles, authorization, null, null);
-        return apiClient.execute(call);
+        Type localVarReturnType = new TypeToken<Posts>(){}.getType();
+        return apiClient.execute(call, localVarReturnType);
     }
 
     /**
@@ -479,7 +488,7 @@ public class PostMultipartformDataApi {
      * @return The request call
      * @throws ApiException If fail to process the API call, e.g. serializing the request body object
      */
-    public com.squareup.okhttp.Call apiV1PostsPostAsync(String postTitle, String postBody, Integer postCategoryId, File postFiles, String authorization, final ApiCallback<Void> callback) throws ApiException {
+    public com.squareup.okhttp.Call apiV1PostsPostAsync(String postTitle, String postBody, Integer postCategoryId, File postFiles, String authorization, final ApiCallback<Posts> callback) throws ApiException {
 
         ProgressResponseBody.ProgressListener progressListener = null;
         ProgressRequestBody.ProgressRequestListener progressRequestListener = null;
@@ -501,7 +510,8 @@ public class PostMultipartformDataApi {
         }
 
         com.squareup.okhttp.Call call = apiV1PostsPostValidateBeforeCall(postTitle, postBody, postCategoryId, postFiles, authorization, progressListener, progressRequestListener);
-        apiClient.executeAsync(call, callback);
+        Type localVarReturnType = new TypeToken<Posts>(){}.getType();
+        apiClient.executeAsync(call, localVarReturnType, callback);
         return call;
     }
 }
