@@ -12,6 +12,7 @@
 
 package io.swagger.client.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Arrays;
 import com.google.gson.TypeAdapter;
@@ -26,7 +27,7 @@ import java.io.IOException;
  */
 
 
-public class Auth {
+public class Auth implements Serializable {
   @SerializedName("token")
   private String token = null;
 
