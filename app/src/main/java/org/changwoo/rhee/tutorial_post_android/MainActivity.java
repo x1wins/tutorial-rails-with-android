@@ -169,20 +169,35 @@ public class MainActivity extends AppCompatActivity
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null){
-                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_item, parent,false);
+                ViewHolder holder;
+                if(convertView == null) {
+                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_item, parent, false);
+
+                    holder = new ViewHolder();
+                    holder.image = (ImageView) convertView.findViewById(R.id.avatar);
+                    holder.tv1 = (TextView) convertView.findViewById(R.id.title);
+                    holder.tv2 = (TextView) convertView.findViewById(R.id.sub_title);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
                 }
-                ImageView imageView = (ImageView) convertView.findViewById(R.id.avatar);
-                TextView text1 = (TextView) convertView.findViewById(R.id.title);
-                TextView text2 = (TextView) convertView.findViewById(R.id.sub_title);
+
                 Post post = posts.get(position);
-                text1.setText(post.getTitle());
-                text2.setText(post.getBody());
+                holder.tv1.setText(post.getTitle());
+                holder.tv2.setText(post.getBody());
                 String url = post.getUser().getAvatar();
-                Picasso.get().load(url).into(imageView);
+                Picasso.get().load(url).into(holder.image);
+
                 return convertView;
             }
         };
         mList.setAdapter(adapter);
+    }
+
+    class ViewHolder
+    {
+        ImageView image;
+        TextView tv1;
+        TextView tv2;
     }
 }
