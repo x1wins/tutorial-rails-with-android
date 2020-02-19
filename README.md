@@ -121,3 +121,28 @@ class MainClass implements Serializable {
     }
 }
 ```
+
+### Menu
+https://stackoverflow.com/questions/31722566/dynamic-adding-item-to-navigationview-in-android
+```bash
+final Menu menu = navigationView.getMenu();
+for (int i = 1; i <= 3; i++) {
+   menu.add("Runtime item "+ i);
+}
+
+// adding a section and items into it
+final SubMenu subMenu = menu.addSubMenu("SubMenu Title");
+for (int i = 1; i <= 2; i++) {
+   subMenu.add("SubMenu Item " + i);
+}
+
+// EDIT: If you want to interact with the menu, use
+for (int i = 1; i <= 2; i++) {
+   menu.add(0, itemId, 0, title); and then
+}
+
+public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+}
+```
