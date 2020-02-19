@@ -11,13 +11,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import io.swagger.client.Configuration;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity
                 Integer page = 1;
                 Integer per = 10; // Integer | Per page number
                 Integer postPage = 1; // Integer | Page number for Post
-                Integer postPer = 10; // Integer | Per page number For Post
+                Integer postPer = 40; // Integer | Per page number For Post
                 try {
                     Categories result = apiInstance.apiV1CategoriesGet(authorization, page, per, postPage, postPer);
                     Log.d(this.getClass().toString(), result.toString());
@@ -167,17 +166,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void buildListView(final List<Post> posts){
-        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_2, android.R.id.text1, posts) {
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-
+                if(convertView == null){
+                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_item, parent,false);
+                }
+                ImageView imageView = (ImageView) convertView.findViewById(R.id.avatar);
+                TextView text1 = (TextView) convertView.findViewById(R.id.title);
+                TextView text2 = (TextView) convertView.findViewById(R.id.sub_title);
                 Post post = posts.get(position);
                 text1.setText(post.getTitle());
                 text2.setText(post.getBody());
-                return view;
+                String url = post.getUser().getAvatar();
+                Picasso.get().load(url).into(imageView);
+                return convertView;
             }
         };
         mList.setAdapter(adapter);
