@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+            android:id="@+id/userImage"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="50dip"
+            android:layout_height="50dip" android:src="@drawable/ic_menu_camera" android:scaleType="centerCrop"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <TextView
+                android:id="@+id/title"
+                android:text="Hello  World"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"/>
+        <TextView
+                android:id="@+id/sub_title"
+                android:text="hello world"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:textStyle="bold"/>
+    </LinearLayout>
+
+</LinearLayout>
+
