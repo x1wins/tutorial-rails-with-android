@@ -102,9 +102,7 @@ public class MainActivity extends AppCompatActivity
                     Integer id = category.getId();
                     menu.add(R.id.group_category, id, i, title);
                 }
-                mSelectedCategory = mCategories.get(0);
-                List<Post> posts = mSelectedCategory.getPosts();
-                buildListView(posts);
+                selectMenu(0);
             }
         };
         asyncTask.execute(mAuth);
@@ -157,11 +155,15 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         int position = menuItem.getOrder();
+        selectMenu(position);
+
+        return true;
+    }
+
+    private void selectMenu(int position){
         mSelectedCategory = mCategories.get(position);
         List<Post> posts = mSelectedCategory.getPosts();
         buildListView(posts);
-
-        return true;
     }
 
     private void buildListView(final List<Post> posts){
