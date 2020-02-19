@@ -160,3 +160,46 @@ public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 }
 ```
+
+### ArrayAdaptor
+#### recycle
+https://lucasr.org/2012/04/05/performance-tips-for-androids-listview/
+```java
+    private void buildListView(final List<Post> posts){
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                ViewHolder holder;
+                if(convertView == null) {
+                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_item, parent, false);
+
+                    holder = new ViewHolder();
+                    holder.image = (ImageView) convertView.findViewById(R.id.avatar);
+                    holder.tv1 = (TextView) convertView.findViewById(R.id.title);
+                    holder.tv2 = (TextView) convertView.findViewById(R.id.sub_title);
+                    convertView.setTag(holder);
+                } else {
+                    holder = (ViewHolder) convertView.getTag();
+                }
+
+                Post post = posts.get(position);
+                holder.tv1.setText(post.getTitle());
+                holder.tv2.setText(post.getBody());
+                String url = post.getUser().getAvatar();
+                Picasso.get().load(url).into(holder.image);
+
+                return convertView;
+            }
+        };
+        mList.setAdapter(adapter);
+    }
+
+    class ViewHolder
+    {
+        ImageView image;
+        TextView tv1;
+        TextView tv2;
+    }
+```
+
+
