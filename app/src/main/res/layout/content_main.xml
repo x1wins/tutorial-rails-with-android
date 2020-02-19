@@ -10,7 +10,7 @@
         tools:context="org.changwoo.rhee.tutorial_post_android.MainActivity">
 
     <ListView
-            android:id="@+id/list"
+            android:id="@+id/post_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World!"

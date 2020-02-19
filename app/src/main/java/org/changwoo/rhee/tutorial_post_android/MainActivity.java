@@ -3,17 +3,17 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -28,7 +28,6 @@ import io.swagger.client.model.Categories;
 import io.swagger.client.model.Category;
 import io.swagger.client.model.Post;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -36,7 +35,9 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
-    private ListView list;
+    private ListView mList;
+    private List<Category> mCategories;
+    private Category mSelectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        list=(ListView)findViewById(R.id.list);
+        mList = (ListView)findViewById(R.id.post_list);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
@@ -94,15 +95,15 @@ public class MainActivity extends AppCompatActivity
             protected void onPostExecute(Categories categoriesResponse) {
                 super.onPostExecute(categoriesResponse);
                 final Menu menu = mNavigationView.getMenu();
-                List<Category> categories = categoriesResponse.getCategories();
-                for (int i = 0; i < categories.size(); i++) {
-                    Category category = categories.get(i);
+                mCategories = categoriesResponse.getCategories();
+                for (int i = 0; i < mCategories.size(); i++) {
+                    Category category = mCategories.get(i);
                     String title = category.getTitle();
                     Integer id = category.getId();
                     menu.add(R.id.group_category, id, i, title);
                 }
-                Category category = categories.get(0);
-                List<Post> posts = category.getPosts();
+                mSelectedCategory = mCategories.get(0);
+                List<Post> posts = mSelectedCategory.getPosts();
                 buildListView(posts);
             }
         };
@@ -154,6 +155,12 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
+        int position = menuItem.getOrder();
+        mSelectedCategory = mCategories.get(position);
+        List<Post> posts = mSelectedCategory.getPosts();
+        buildListView(posts);
+
         return true;
     }
 
@@ -171,6 +178,6 @@ public class MainActivity extends AppCompatActivity
                 return view;
             }
         };
-        list.setAdapter(adapter);
+        mList.setAdapter(adapter);
     }
 }
