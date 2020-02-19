@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,10 +21,15 @@ import io.swagger.client.api.CategoryApi;
 import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.model.Auth;
 import io.swagger.client.model.Categories;
+import io.swagger.client.model.Category;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private NavigationView mNavigationView;
     private Auth mAuth;
+    private MenuItem mPreviousMenuItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +52,11 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
+        final Menu menu = mNavigationView.getMenu();
+        menu.clear();
 
         AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
             @Override
@@ -65,21 +72,28 @@ public class MainActivity extends AppCompatActivity
                 Integer postPer = 10; // Integer | Per page number For Post
                 try {
                     Categories result = apiInstance.apiV1CategoriesGet(authorization, page, per, postPage, postPer);
-                    System.out.println(result);
+                    Log.d(this.getClass().toString(), result.toString());
                     return result;
                 } catch (ApiException e) {
-                    System.err.println("Exception when calling CategoryApi#apiV1CategoriesGet");
+                    Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");
                     e.printStackTrace();
                     return null;
                 }
             }
 
             @Override
-            protected void onPostExecute(Categories categories) {
-                super.onPostExecute(categories);
+            protected void onPostExecute(Categories categoriesResponse) {
+                super.onPostExecute(categoriesResponse);
+                final Menu menu = mNavigationView.getMenu();
+                List<Category> categories = categoriesResponse.getCategories();
+                for (int i = 0; i < categories.size(); i++) {
+                    Category category = categories.get(i);
+                    String title = category.getTitle();
+                    Integer id = category.getId();
+                    menu.add(R.id.group_category, id, i, title);
+                }
             }
         };
-
         asyncTask.execute(mAuth);
     }
 
@@ -117,23 +131,14 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        menuItem.setCheckable(true);
+        menuItem.setChecked(true);
+        if (mPreviousMenuItem != null) {
+            mPreviousMenuItem.setChecked(false);
         }
+        mPreviousMenuItem = menuItem;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
