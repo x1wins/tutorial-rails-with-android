@@ -1,5 +1,6 @@
 package org.changwoo.rhee.tutorial_post_android;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,10 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import io.swagger.client.ApiClient;
+import io.swagger.client.ApiException;
+import io.swagger.client.Configuration;
+import io.swagger.client.api.CategoryApi;
+import io.swagger.client.auth.ApiKeyAuth;
+import io.swagger.client.model.Auth;
+import io.swagger.client.model.Categories;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private Auth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +48,39 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mAuth = (Auth) getIntent().getSerializableExtra("auth");
+
+        AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
+            @Override
+            protected Categories doInBackground(Auth... auth) {
+                String authorization = auth[0].getToken();
+                ApiClient defaultClient = Configuration.getDefaultApiClient();
+                ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
+                Bearer.setApiKey(authorization);
+                CategoryApi apiInstance = new CategoryApi();
+                Integer page = 1;
+                Integer per = 10; // Integer | Per page number
+                Integer postPage = 1; // Integer | Page number for Post
+                Integer postPer = 10; // Integer | Per page number For Post
+                try {
+                    Categories result = apiInstance.apiV1CategoriesGet(authorization, page, per, postPage, postPer);
+                    System.out.println(result);
+                    return result;
+                } catch (ApiException e) {
+                    System.err.println("Exception when calling CategoryApi#apiV1CategoriesGet");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Categories categories) {
+                super.onPostExecute(categories);
+            }
+        };
+
+        asyncTask.execute(mAuth);
     }
 
     @Override
