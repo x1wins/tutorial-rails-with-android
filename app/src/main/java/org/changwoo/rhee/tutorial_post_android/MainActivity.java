@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity
                 ViewHolder holder;
                 if(convertView == null) {
                     convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_item, parent, false);
-
                     holder = new ViewHolder();
                     holder.image = (ImageView) convertView.findViewById(R.id.avatar);
                     holder.tv1 = (TextView) convertView.findViewById(R.id.title);
@@ -183,10 +182,11 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 Post post = posts.get(position);
-                holder.tv1.setText(post.getTitle());
-                holder.tv2.setText(post.getBody());
+                holder.tv1.setText(post.getBody());
+                holder.tv2.setText(post.getUser().getName());
                 String url = post.getUser().getAvatar();
-                Picasso.get().load(url).into(holder.image);
+                Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
+                        .error(R.drawable.noise).into(holder.image);
 
                 return convertView;
             }
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity
         mList.setAdapter(adapter);
     }
 
-    class ViewHolder
+    private class ViewHolder
     {
         ImageView image;
         TextView tv1;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_margin="10px"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -9,7 +10,10 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
             android:layout_width="50dip"
-            android:layout_height="50dip" android:src="@drawable/ic_menu_camera" android:scaleType="centerCrop"/>
+            android:layout_height="50dip"
+            android:src="@drawable/contact_picture_placeholder"
+            android:layout_margin="10px"
+            android:scaleType="centerCrop"/>
 
     <LinearLayout
             android:orientation="vertical"
@@ -20,13 +24,18 @@
                 android:text="Hello  World"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"/>
+                android:maxLines="1"
+                android:textSize="20dp"
+                android:layout_margin="5px"
+                android:textStyle="bold"/>
         <TextView
                 android:id="@+id/sub_title"
                 android:text="hello world"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:textSize="15dp"
+                android:layout_margin="5px"
                 android:textStyle="bold"/>
     </LinearLayout>
 
