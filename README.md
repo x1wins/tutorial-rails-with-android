@@ -55,7 +55,21 @@ https://github.com/swagger-api/swagger-codegen/wiki/FAQ#how-can-i-generate-an-an
       -o /var/tmp/java/okhttp-gson/  
 ```   
 
-### Truble solve
+### Troubleshooting
+#### Android studio does not recognize the project as android
+1. close the project and delete the .idea folder.
+https://github.com/firebase/FirebaseUI-Android/issues/1349#issuecomment-396329774
+
+2.
+welcome to intellij IDEA -> import project -> 
+import project from external model -> Gradle -> 
+check - Use Auto-import
+check - Create directories for empty content roots automatically
+
+![step1](/step1.png)
+![step2](/step2.png)  
+![step3](/step13.png)  
+
 #### Caused by: android.os.NetworkOnMainThreadException
 https://www.toptal.com/android/android-threading-all-you-need-to-know
 
