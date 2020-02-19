@@ -66,9 +66,9 @@ import project from external model -> Gradle ->
 check - Use Auto-import
 check - Create directories for empty content roots automatically
 
-![step1](/step1.png)
-![step2](/step2.png)  
-![step3](/step13.png)  
+![step1](/screenshot/step1.png)
+![step2](/screenshot/step2.png)  
+![step3](/screenshot/step13.png)  
 
 #### Caused by: android.os.NetworkOnMainThreadException
 https://www.toptal.com/android/android-threading-all-you-need-to-know
