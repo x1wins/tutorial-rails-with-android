@@ -14,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import io.swagger.client.Configuration;
@@ -22,7 +26,9 @@ import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.model.Auth;
 import io.swagger.client.model.Categories;
 import io.swagger.client.model.Category;
+import io.swagger.client.model.Post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     private NavigationView mNavigationView;
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
+    private ListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        list=(ListView)findViewById(R.id.list);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
@@ -92,6 +101,9 @@ public class MainActivity extends AppCompatActivity
                     Integer id = category.getId();
                     menu.add(R.id.group_category, id, i, title);
                 }
+                Category category = categories.get(0);
+                List<Post> posts = category.getPosts();
+                buildListView(posts);
             }
         };
         asyncTask.execute(mAuth);
@@ -143,5 +155,22 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void buildListView(final List<Post> posts){
+        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_2, android.R.id.text1, posts) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+
+                Post post = posts.get(position);
+                text1.setText(post.getTitle());
+                text2.setText(post.getBody());
+                return view;
+            }
+        };
+        list.setAdapter(adapter);
     }
 }
