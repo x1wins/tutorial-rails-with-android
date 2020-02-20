@@ -1,5 +1,6 @@
 package org.changwoo.rhee.tutorial_post_android;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,10 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
@@ -62,6 +60,17 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         mList = (ListView)findViewById(R.id.post_list);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                List<Post> posts = mSelectedCategory.getPosts();
+                Post post = posts.get(position);
+                Intent intent = new Intent(getApplicationContext(), ScrollingActivity.class);
+                intent.putExtra("post", post);
+                startActivity(intent);
+            }
+        });
+
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
