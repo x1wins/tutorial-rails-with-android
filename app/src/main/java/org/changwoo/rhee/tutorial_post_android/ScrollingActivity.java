@@ -32,7 +32,7 @@ public class ScrollingActivity extends AppCompatActivity {
         mPost = (Post) getIntent().getSerializableExtra("post");
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(mPost.getTitle());
-        TextView textView = findViewById(R.id.detail_content);
-        textView.setText(mPost.getBody());
+//        TextView textView = findViewById(R.id.detail_content);
+//        textView.setText(mPost.getBody());
     }
 }
