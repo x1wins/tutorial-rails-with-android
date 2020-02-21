@@ -193,7 +193,7 @@ public class PostListActivity extends AppCompatActivity
                 }
 
                 Post post = posts.get(position);
-                holder.tv1.setText(post.getBody());
+                holder.tv1.setText(post.getTitle());
                 holder.tv2.setText(post.getUser().getName());
                 String url = post.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)

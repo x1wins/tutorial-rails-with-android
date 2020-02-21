@@ -2,7 +2,6 @@ package org.changwoo.rhee.tutorial_post_android;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,7 @@ public class PostShowActivity extends AppCompatActivity {
                 } else {
                     holder = (PostItemViewHolder) convertView.getTag();
                 }
-                holder.title.setText(post.getBody());
+                holder.title.setText(post.getTitle());
                 holder.name.setText(post.getUser().getName());
                 String url = post.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
