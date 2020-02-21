@@ -1,10 +1,6 @@
 package org.changwoo.rhee.tutorial_post_android;
 
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -15,35 +11,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
-import io.swagger.client.model.Auth;
 import io.swagger.client.model.Comment;
 import io.swagger.client.model.Post;
 
 import java.util.List;
 
-public class ScrollingActivity extends AppCompatActivity {
+public class PostShowActivity extends AppCompatActivity {
     private Post mPost;
     private ListView mList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scrolling);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        mList = (ListView)findViewById(R.id.post_list);
+        setContentView(R.layout.activity_post_show);
+        mList = (ListView)findViewById(R.id.post_show_list);
         mPost = (Post) getIntent().getSerializableExtra("post");
-        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(mPost.getTitle());
+        getSupportActionBar().setTitle(mPost.getTitle());
         buildListView(mPost);
     }
 
@@ -52,7 +34,7 @@ public class ScrollingActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 int count = 0;
-                List <Comment> comments = post.getComments();
+                List<Comment> comments = post.getComments();
                 if(comments != null){
                     count = comments.size();
                 }
@@ -86,16 +68,16 @@ public class ScrollingActivity extends AppCompatActivity {
             }
 
             private View recyclePostItemConvertView(View convertView, ViewGroup parent){
-                ScrollingActivity.PostItemViewHolder holder;
+                PostItemViewHolder holder;
                 if(convertView == null) {
                     convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_item, parent, false);
-                    holder = new ScrollingActivity.PostItemViewHolder();
+                    holder = new PostItemViewHolder();
                     holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
                     holder.title = (TextView) convertView.findViewById(R.id.title);
                     holder.name = (TextView) convertView.findViewById(R.id.sub_title);
                     convertView.setTag(holder);
                 } else {
-                    holder = (ScrollingActivity.PostItemViewHolder) convertView.getTag();
+                    holder = (PostItemViewHolder) convertView.getTag();
                 }
                 holder.title.setText(post.getBody());
                 holder.name.setText(post.getUser().getName());
@@ -106,32 +88,32 @@ public class ScrollingActivity extends AppCompatActivity {
             }
 
             private View recyclePostDetailItemConvertView(View convertView, ViewGroup parent){
-                ScrollingActivity.PostDetailItemViewHolder holder;
+                PostDetailItemViewHolder holder;
                 if(convertView == null) {
-                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_detail_item, parent, false);
-                    holder = new ScrollingActivity.PostDetailItemViewHolder();
+                    convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.post_show_item, parent, false);
+                    holder = new PostDetailItemViewHolder();
                     holder.content = (TextView) convertView.findViewById(R.id.post_content);
                     convertView.setTag(holder);
                 } else {
-                    holder = (ScrollingActivity.PostDetailItemViewHolder) convertView.getTag();
+                    holder = (PostDetailItemViewHolder) convertView.getTag();
                 }
                 holder.content.setText(post.getBody());
                 return convertView;
             }
 
             private View recycleCommentItemConvertView(int position, View convertView, ViewGroup parent){
-                ScrollingActivity.CommentItemViewHolder holder;
+                CommentItemViewHolder holder;
                 List<Comment> comments = post.getComments();
                 Comment comment = comments.get(position-2);
                 if(convertView == null) {
                     convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.comment_item, parent, false);
-                    holder = new ScrollingActivity.CommentItemViewHolder();
+                    holder = new CommentItemViewHolder();
                     holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
                     holder.title = (TextView) convertView.findViewById(R.id.title);
                     holder.name = (TextView) convertView.findViewById(R.id.sub_title);
                     convertView.setTag(holder);
                 } else {
-                    holder = (ScrollingActivity.CommentItemViewHolder) convertView.getTag();
+                    holder = (CommentItemViewHolder) convertView.getTag();
                 }
                 holder.title.setText(comment.getBody());
                 holder.name.setText(comment.getUser().getName());
