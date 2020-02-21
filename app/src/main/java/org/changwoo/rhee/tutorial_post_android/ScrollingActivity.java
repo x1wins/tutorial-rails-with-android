@@ -40,7 +40,7 @@ public class ScrollingActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        mList = (ListView)findViewById(R.id.post_detail_list);
+        mList = (ListView)findViewById(R.id.post_list);
         mPost = (Post) getIntent().getSerializableExtra("post");
         CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolbarLayout.setTitle(mPost.getTitle());
@@ -51,7 +51,13 @@ public class ScrollingActivity extends AppCompatActivity {
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0) {
             @Override
             public int getCount() {
-                return 4;
+                int count = 0;
+                List <Comment> comments = post.getComments();
+                if(comments != null){
+                    count = comments.size();
+                }
+                count += 2;
+                return count;
             }
             @Override
             public int getViewTypeCount() {
@@ -74,7 +80,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 }else if (position == 1) {
                     convertView = recyclePostDetailItemConvertView(convertView, parent);
                 }else{
-                    convertView = recycleCommentItemConvertView(convertView, parent);
+                    convertView = recycleCommentItemConvertView(position, convertView, parent);
                 }
                 return convertView;
             }
@@ -113,8 +119,10 @@ public class ScrollingActivity extends AppCompatActivity {
                 return convertView;
             }
 
-            private View recycleCommentItemConvertView(View convertView, ViewGroup parent){
+            private View recycleCommentItemConvertView(int position, View convertView, ViewGroup parent){
                 ScrollingActivity.CommentItemViewHolder holder;
+                List<Comment> comments = post.getComments();
+                Comment comment = comments.get(position-2);
                 if(convertView == null) {
                     convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.comment_item, parent, false);
                     holder = new ScrollingActivity.CommentItemViewHolder();
@@ -125,9 +133,9 @@ public class ScrollingActivity extends AppCompatActivity {
                 } else {
                     holder = (ScrollingActivity.CommentItemViewHolder) convertView.getTag();
                 }
-                holder.title.setText(post.getBody());
-                holder.name.setText(post.getUser().getName());
-                String url = post.getUser().getAvatar();
+                holder.title.setText(comment.getBody());
+                holder.name.setText(comment.getUser().getName());
+                String url = comment.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
                         .error(R.drawable.noise).into(holder.avatar);
                 return convertView;
