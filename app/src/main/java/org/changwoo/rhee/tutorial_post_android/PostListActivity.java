@@ -27,7 +27,7 @@ import io.swagger.client.model.Post;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
+public class PostListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 List<Post> posts = mSelectedCategory.getPosts();
                 Post post = posts.get(position);
-                Intent intent = new Intent(getApplicationContext(), ScrollingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
                 intent.putExtra("post", post);
                 startActivity(intent);
             }
