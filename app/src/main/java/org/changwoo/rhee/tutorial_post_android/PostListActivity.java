@@ -107,7 +107,7 @@ public class PostListActivity extends AppCompatActivity
                 mCategories = categoriesResponse.getCategories();
                 for (int i = 0; i < mCategories.size(); i++) {
                     Category category = mCategories.get(i);
-                    String title = category.getTitle();
+                    String title = category.getId() + " " + category.getTitle();
                     Integer id = category.getId();
                     menu.add(R.id.group_category, id, i, title);
                 }
