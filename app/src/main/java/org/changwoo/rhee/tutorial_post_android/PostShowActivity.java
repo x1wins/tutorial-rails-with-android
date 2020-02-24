@@ -13,6 +13,7 @@ import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import io.swagger.client.Configuration;
 import io.swagger.client.api.CommentApi;
+import io.swagger.client.api.PostApi;
 import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.model.Auth;
 import io.swagger.client.model.Comment;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class PostShowActivity extends AppCompatActivity {
     private Auth mAuth;
+    private Integer mPostId;
     private Post mPost;
     private ListView mList;
     private EditText mEditText;
@@ -33,12 +35,11 @@ public class PostShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_show);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
-        mPost = (Post) getIntent().getSerializableExtra("post");
+        mPostId = getIntent().getIntExtra("postId", 0);
         mList = (ListView)findViewById(R.id.post_show_list);
         mEditText = (EditText) findViewById(R.id.edittext_chatbox);
         mButton = (Button) findViewById(R.id.button_chatbox_send);
-        getSupportActionBar().setTitle(mPost.getTitle());
-        buildListView(mPost);
+        buildListView(mPostId);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +68,8 @@ public class PostShowActivity extends AppCompatActivity {
                     @Override
                     protected void onPostExecute(Comment commentResponse) {
                         super.onPostExecute(commentResponse);
-                        mPost.getComments().add(0, commentResponse);
                         mEditText.setText("");
+                        mPost.getComments().add(0, commentResponse);
                         mList.invalidateViews();
                     }
                 };
@@ -78,7 +79,40 @@ public class PostShowActivity extends AppCompatActivity {
         });
     }
 
-    private void buildListView(final Post post){
+    private void buildListView(final Integer postId){
+        AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
+            @Override
+            protected Post doInBackground(Auth... auth) {
+                String authorization = auth[0].getToken();
+                ApiClient defaultClient = Configuration.getDefaultApiClient();
+                ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
+                Bearer.setApiKey(authorization);
+                PostApi apiInstance = new PostApi();
+                Integer commentPage = 1;
+                Integer commentPer = 10;
+                try {
+                    Post result = apiInstance.apiV1PostsIdGet(String.valueOf(postId), authorization, commentPage, commentPer);
+                    Log.d(this.getClass().toString(), result.toString());
+                    return result;
+                } catch (ApiException e) {
+                    Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Post postResponse) {
+                super.onPostExecute(postResponse);
+                mPost = postResponse;
+                getSupportActionBar().setTitle(mPost.getTitle());
+                buildAdapter(mPost);
+            }
+        };
+        asyncTask.execute(mAuth);
+    }
+
+    private void buildAdapter(final Post post){
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0) {
             @Override
             public int getCount() {
