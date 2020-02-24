@@ -44,22 +44,21 @@ public class PostIndexActivity extends AppCompatActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
-                        Integer categoryId = mSelectedCategory.getId();
-                        buildListView(categoryId);
-                    }
+            new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
+                    Integer categoryId = mSelectedCategory.getId();
+                    buildListView(categoryId);
                 }
+            }
         );
         setSupportActionBar(mToolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
 
