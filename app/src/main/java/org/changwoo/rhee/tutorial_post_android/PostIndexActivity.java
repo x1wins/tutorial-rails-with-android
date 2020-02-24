@@ -27,7 +27,7 @@ import io.swagger.client.model.Post;
 
 import java.util.List;
 
-public class PostListActivity extends AppCompatActivity
+public class PostIndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
     private NavigationView mNavigationView;
@@ -40,7 +40,7 @@ public class PostListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_post_index);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 

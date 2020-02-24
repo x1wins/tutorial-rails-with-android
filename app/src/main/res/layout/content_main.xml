@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/app_bar_main"
-        tools:context="org.changwoo.rhee.tutorial_post_android.PostListActivity">
+        tools:context="org.changwoo.rhee.tutorial_post_android.PostIndexActivity">
 
     <ListView
             android:id="@+id/post_list"

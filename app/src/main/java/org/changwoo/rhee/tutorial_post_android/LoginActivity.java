@@ -333,7 +333,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
             if(auth != null){
-                Intent intent = new Intent(getApplicationContext(), PostListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PostIndexActivity.class);
                 intent.putExtra("auth", auth);
                 startActivity(intent);
                 finish();
