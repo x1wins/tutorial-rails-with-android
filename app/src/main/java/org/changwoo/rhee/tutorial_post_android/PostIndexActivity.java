@@ -67,7 +67,7 @@ public class PostIndexActivity extends AppCompatActivity
                 Post post = posts.get(position);
                 Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
                 intent.putExtra("auth", mAuth);
-                intent.putExtra("post", post);
+                intent.putExtra("postId", post.getId());
                 startActivity(intent);
             }
         });
