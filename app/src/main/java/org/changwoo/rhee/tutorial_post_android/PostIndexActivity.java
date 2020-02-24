@@ -205,8 +205,7 @@ public class PostIndexActivity extends AppCompatActivity
         mList.setAdapter(adapter);
     }
 
-    private class ViewHolder
-    {
+    private class ViewHolder {
         ImageView image;
         TextView tv1;
         TextView tv2;
