@@ -20,15 +20,11 @@ import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
 import io.swagger.client.Configuration;
 import io.swagger.client.api.CategoryApi;
+import io.swagger.client.api.PostApi;
 import io.swagger.client.auth.ApiKeyAuth;
-import io.swagger.client.model.Auth;
-import io.swagger.client.model.Categories;
-import io.swagger.client.model.Category;
-import io.swagger.client.model.Post;
+import io.swagger.client.model.*;
 
 import java.util.List;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 
 public class PostIndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,12 +48,8 @@ public class PostIndexActivity extends AppCompatActivity
                     @Override
                     public void onRefresh() {
                         Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
-                        try {
-                            Thread.sleep(3000);
-                            mSwipeRefreshLayout.setRefreshing(false);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        Integer categoryId = mSelectedCategory.getId();
+                        buildListView(categoryId);
                     }
                 }
         );
@@ -191,11 +183,47 @@ public class PostIndexActivity extends AppCompatActivity
     private void selectMenu(int position){
         mSelectedCategory = mCategories.get(position);
         mToolbar.setTitle(mSelectedCategory.getTitle());
-        List<Post> posts = mSelectedCategory.getPosts();
-        buildListView(posts);
+        Integer categoryId = mSelectedCategory.getId();
+        buildListView(categoryId);
     }
 
-    private void buildListView(final List<Post> posts){
+    private void buildListView(final Integer categoryId){
+        AsyncTask<Auth, Void, List<Post>> asyncTask = new AsyncTask<Auth, Void, List<Post>>() {
+            @Override
+            protected List<Post> doInBackground(Auth... auth) {
+                String authorization = auth[0].getToken();
+                ApiClient defaultClient = Configuration.getDefaultApiClient();
+                ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
+                Bearer.setApiKey(authorization);
+                PostApi apiInstance = new PostApi();
+                Integer page = 1;
+                Integer per = 10;
+                Integer commentPage = 1;
+                Integer commentPer = 0;
+                String search = null;
+                try {
+                    Posts result = apiInstance.apiV1PostsGet(authorization, categoryId, page, per, commentPage, commentPer, search);
+                    Log.d(this.getClass().toString(), result.toString());
+                    return result.getPosts();
+                } catch (ApiException e) {
+                    Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<Post> postsResponse) {
+                super.onPostExecute(postsResponse);
+                getSupportActionBar().setTitle(mSelectedCategory.getTitle());
+                buildAdapter(postsResponse);
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        asyncTask.execute(mAuth);
+    }
+
+    private void buildAdapter(final List<Post> posts){
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
