@@ -66,6 +66,7 @@ public class PostIndexActivity extends AppCompatActivity
                 List<Post> posts = mSelectedCategory.getPosts();
                 Post post = posts.get(position);
                 Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
+                intent.putExtra("auth", mAuth);
                 intent.putExtra("post", post);
                 startActivity(intent);
             }
