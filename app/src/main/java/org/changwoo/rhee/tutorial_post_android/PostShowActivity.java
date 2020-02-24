@@ -76,7 +76,6 @@ public class PostShowActivity extends AppCompatActivity {
                     }
                 };
                 asyncTask.execute(mAuth);
-
             }
         });
     }
