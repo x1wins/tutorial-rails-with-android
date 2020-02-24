@@ -18,6 +18,7 @@ import java.util.List;
 public class PostShowActivity extends AppCompatActivity {
     private Post mPost;
     private ListView mList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,20 +126,17 @@ public class PostShowActivity extends AppCompatActivity {
         mList.setAdapter(adapter);
     }
 
-    private class PostItemViewHolder
-    {
+    private class PostItemViewHolder {
         ImageView avatar;
         TextView title;
         TextView name;
     }
 
-    private class PostDetailItemViewHolder
-    {
+    private class PostDetailItemViewHolder {
         TextView content;
     }
 
-    private class CommentItemViewHolder
-    {
+    private class CommentItemViewHolder {
         ImageView avatar;
         TextView title;
         TextView name;
