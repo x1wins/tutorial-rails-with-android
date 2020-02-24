@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.*;
 import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
@@ -38,6 +39,7 @@ public class PostShowActivity extends AppCompatActivity {
         mPostId = getIntent().getIntExtra("postId", 0);
         mList = (ListView)findViewById(R.id.post_show_list);
         mEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mButton = (Button) findViewById(R.id.button_chatbox_send);
         buildListView(mPostId);
         mButton.setOnClickListener(new View.OnClickListener() {
