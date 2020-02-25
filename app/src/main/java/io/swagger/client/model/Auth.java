@@ -40,6 +40,9 @@ public class Auth implements Serializable {
   @SerializedName("email")
   private String email = null;
 
+  @SerializedName("avatar")
+  private String avatar = null;
+
   public Auth token(String token) {
     this.token = token;
     return this;
@@ -112,6 +115,24 @@ public class Auth implements Serializable {
     this.email = email;
   }
 
+  public Auth avatar(String avatar) {
+    this.avatar = avatar;
+    return this;
+  }
+
+   /**
+   * Get avatar
+   * @return avatar
+  **/
+  @Schema(description = "")
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -125,12 +146,13 @@ public class Auth implements Serializable {
     return Objects.equals(this.token, auth.token) &&
         Objects.equals(this.exp, auth.exp) &&
         Objects.equals(this.username, auth.username) &&
-        Objects.equals(this.email, auth.email);
+        Objects.equals(this.email, auth.email) &&
+        Objects.equals(this.avatar, auth.avatar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, exp, username, email);
+    return Objects.hash(token, exp, username, email, avatar);
   }
 
 
@@ -143,6 +165,7 @@ public class Auth implements Serializable {
     sb.append("    exp: ").append(toIndentedString(exp)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    avatar: ").append(toIndentedString(avatar)).append("\n");
     sb.append("}");
     return sb.toString();
   }
