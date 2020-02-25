@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -36,6 +35,7 @@ public class PostIndexActivity extends AppCompatActivity
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    public static final int POST_FORM_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,10 @@ public class PostIndexActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), PostFormActivity.class);
+                intent.putExtra("auth", mAuth);
+                intent.putExtra("categoryId", mSelectedCategory.getId());
+                startActivityForResult(intent, POST_FORM_REQUEST);
             }
         });
 
@@ -179,6 +182,19 @@ public class PostIndexActivity extends AppCompatActivity
         selectMenu(position);
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == POST_FORM_REQUEST) {
+            if (data.hasExtra("post")) {
+                Post post = (Post) data.getSerializableExtra("post");
+                mSelectedCategory.getPosts().add(0, post);
+                List <Post> posts = mSelectedCategory.getPosts();
+                buildAdapter(posts);
+                mList.invalidateViews();
+            }
+        }
     }
 
     private void selectMenu(int position){

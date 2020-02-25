@@ -27,6 +27,13 @@ import java.io.IOException;
 
 
 public class PostParam {
+
+  public PostParam(String title, String body, Integer categoryId) {
+    this.title = title;
+    this.body = body;
+    this.categoryId = categoryId;
+  }
+
   @SerializedName("title")
   private String title = null;
 
