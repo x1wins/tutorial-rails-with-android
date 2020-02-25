@@ -3,8 +3,6 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,13 +20,15 @@ import io.swagger.client.model.PostParam;
 public class PostFormActivity extends AppCompatActivity {
     private Auth mAuth;
     private Integer mCategoryId;
-    private EditText mEditText;
+    private EditText mTitle;
+    private EditText mBody;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_form);
         getSupportActionBar().setTitle("Form");
-        mEditText = (EditText) findViewById(R.id.edittext);
+        mTitle = (EditText) findViewById(R.id.title);
+        mBody = (EditText) findViewById(R.id.body);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
         mCategoryId = getIntent().getIntExtra("categoryId", 0);
     }
@@ -57,6 +57,22 @@ public class PostFormActivity extends AppCompatActivity {
     }
 
     private void sendPost(){
+        final String title = mTitle.getEditableText().toString();
+        final String message = mBody.getEditableText().toString();
+
+        mTitle.setError(null);
+        mBody.setError(null);
+
+        if(title.trim().equalsIgnoreCase("")){
+            mTitle.setError("This field can not be blank");
+            return;
+        }
+
+        if(message.trim().equalsIgnoreCase("")){
+            mBody.setError("This field can not be blank");
+            return;
+        }
+
         AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
             @Override
             protected Post doInBackground(Auth... auth) {
@@ -65,8 +81,6 @@ public class PostFormActivity extends AppCompatActivity {
                 ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
                 Bearer.setApiKey(authorization);
                 PostApi apiInstance = new PostApi();
-                String title = "hello";
-                String message = mEditText.getEditableText().toString();
                 PostParam body = new PostParam(title, message, mCategoryId);
                 try {
                     Post result = apiInstance.apiV1PostsPost(body, authorization);
