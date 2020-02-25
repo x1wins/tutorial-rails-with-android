@@ -16,18 +16,18 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".PostIndexActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
                 android:name=".LoginActivity"
                 android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".PostIndexActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".PostFormActivity">
         </activity>
         <activity android:name=".PostShowActivity">
         </activity>
