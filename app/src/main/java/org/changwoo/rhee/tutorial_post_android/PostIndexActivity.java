@@ -28,6 +28,7 @@ import java.util.List;
 public class PostIndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
+    private FloatingActionButton mFab;
     private NavigationView mNavigationView;
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
@@ -54,8 +55,8 @@ public class PostIndexActivity extends AppCompatActivity
             }
         );
         setSupportActionBar(mToolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PostFormActivity.class);
@@ -64,6 +65,7 @@ public class PostIndexActivity extends AppCompatActivity
                 startActivityForResult(intent, POST_FORM_REQUEST);
             }
         });
+        mFab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -125,6 +127,7 @@ public class PostIndexActivity extends AppCompatActivity
                     menu.add(R.id.group_category, id, i, title);
                 }
                 selectMenu(0);
+                mFab.show();
             }
         };
         asyncTask.execute(mAuth);
