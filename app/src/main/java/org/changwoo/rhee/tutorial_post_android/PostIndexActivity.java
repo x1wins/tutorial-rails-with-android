@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -29,6 +28,7 @@ import java.util.List;
 public class PostIndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
+    private FloatingActionButton mFab;
     private NavigationView mNavigationView;
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
@@ -36,6 +36,7 @@ public class PostIndexActivity extends AppCompatActivity
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    public static final int POST_FORM_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +55,17 @@ public class PostIndexActivity extends AppCompatActivity
             }
         );
         setSupportActionBar(mToolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), PostFormActivity.class);
+                intent.putExtra("auth", mAuth);
+                intent.putExtra("categoryId", mSelectedCategory.getId());
+                startActivityForResult(intent, POST_FORM_REQUEST);
             }
         });
+        mFab.hide();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -122,6 +127,7 @@ public class PostIndexActivity extends AppCompatActivity
                     menu.add(R.id.group_category, id, i, title);
                 }
                 selectMenu(0);
+                mFab.show();
             }
         };
         asyncTask.execute(mAuth);
@@ -179,6 +185,19 @@ public class PostIndexActivity extends AppCompatActivity
         selectMenu(position);
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == POST_FORM_REQUEST) {
+            if (data.hasExtra("post")) {
+                Post post = (Post) data.getSerializableExtra("post");
+                mSelectedCategory.getPosts().add(0, post);
+                List <Post> posts = mSelectedCategory.getPosts();
+                buildAdapter(posts);
+                mList.invalidateViews();
+            }
+        }
     }
 
     private void selectMenu(int position){
