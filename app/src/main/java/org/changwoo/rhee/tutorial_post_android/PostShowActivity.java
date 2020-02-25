@@ -45,6 +45,13 @@ public class PostShowActivity extends AppCompatActivity {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String message = mEditText.getEditableText().toString();
+                mEditText.setError(null);
+                if(message.trim().equalsIgnoreCase("")){
+                    mEditText.setError("This field can not be blank");
+                    return;
+                }
+
                 AsyncTask<Auth, Void, Comment> asyncTask = new AsyncTask<Auth, Void, Comment>() {
                     @Override
                     protected Comment doInBackground(Auth... auth) {
