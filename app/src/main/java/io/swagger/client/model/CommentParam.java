@@ -27,6 +27,13 @@ import java.io.IOException;
 
 
 public class CommentParam {
+
+  public CommentParam(String body, Integer postId) {
+    super();
+    this.body = body;
+    this.postId = postId;
+  }
+
   @SerializedName("body")
   private String body = null;
 

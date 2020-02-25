@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,21 +29,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import io.swagger.client.ApiCallback;
-import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
-import io.swagger.client.Configuration;
 import io.swagger.client.api.AuthenticationApi;
-import io.swagger.client.api.PostApi;
-import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.model.Auth;
 import io.swagger.client.model.AuthParam;
-import io.swagger.client.model.Post;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -342,7 +333,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
             if(auth != null){
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PostIndexActivity.class);
                 intent.putExtra("auth", auth);
                 startActivity(intent);
                 finish();
