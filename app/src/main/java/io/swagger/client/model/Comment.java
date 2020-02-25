@@ -12,6 +12,7 @@
 
 package io.swagger.client.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Arrays;
 import com.google.gson.TypeAdapter;
@@ -27,7 +28,7 @@ import java.io.IOException;
  */
 
 
-public class Comment {
+public class Comment implements Serializable {
   @SerializedName("id")
   private Integer id = null;
 

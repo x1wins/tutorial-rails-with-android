@@ -12,6 +12,7 @@
 
 package io.swagger.client.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Arrays;
 import com.google.gson.TypeAdapter;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 
 
-public class Categories {
+public class Categories implements Serializable {
   @SerializedName("categories")
   private List<Category> categories = null;
 

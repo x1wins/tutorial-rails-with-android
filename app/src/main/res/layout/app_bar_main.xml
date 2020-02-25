@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="org.changwoo.rhee.tutorial_post_android.MainActivity">
+        tools:context="org.changwoo.rhee.tutorial_post_android.PostIndexActivity">
 
     <android.support.design.widget.AppBarLayout
             android:layout_height="wrap_content"
