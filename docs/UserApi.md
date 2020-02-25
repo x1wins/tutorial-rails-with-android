@@ -77,7 +77,7 @@ create user
 
 
 UserApi apiInstance = new UserApi();
-Object body = null; // Object | 
+UserParam body = new UserParam(); // UserParam | 
 try {
     apiInstance.apiV1UsersPost(body);
 } catch (ApiException e) {
@@ -90,7 +90,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**UserParam**](UserParam.md)|  |
 
 ### Return type
 

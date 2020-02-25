@@ -202,7 +202,7 @@ Bearer.setApiKey("YOUR API KEY");
 //Bearer.setApiKeyPrefix("Token");
 
 CommentApi apiInstance = new CommentApi();
-Object body = null; // Object | 
+CommentParam body = new CommentParam(); // CommentParam | 
 String id = "id_example"; // String | id
 String authorization = "authorization_example"; // String | JWT token for Authorization
 try {
@@ -218,7 +218,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**CommentParam**](CommentParam.md)|  |
  **id** | **String**| id |
  **authorization** | **String**| JWT token for Authorization | [optional]
 
@@ -259,7 +259,7 @@ Bearer.setApiKey("YOUR API KEY");
 //Bearer.setApiKeyPrefix("Token");
 
 CommentApi apiInstance = new CommentApi();
-Object body = null; // Object | 
+CommentParam body = new CommentParam(); // CommentParam | 
 String authorization = "authorization_example"; // String | JWT token for Authorization
 try {
     Comment result = apiInstance.apiV1CommentsPost(body, authorization);
@@ -274,7 +274,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**CommentParam**](CommentParam.md)|  |
  **authorization** | **String**| JWT token for Authorization | [optional]
 
 ### Return type

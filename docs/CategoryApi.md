@@ -208,7 +208,7 @@ Bearer.setApiKey("YOUR API KEY");
 //Bearer.setApiKeyPrefix("Token");
 
 CategoryApi apiInstance = new CategoryApi();
-Object body = null; // Object | 
+CategoryParam body = new CategoryParam(); // CategoryParam | 
 String id = "id_example"; // String | id
 String authorization = "authorization_example"; // String | JWT token for Authorization
 try {
@@ -224,7 +224,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**CategoryParam**](CategoryParam.md)|  |
  **id** | **String**| id |
  **authorization** | **String**| JWT token for Authorization | [optional]
 
@@ -265,7 +265,7 @@ Bearer.setApiKey("YOUR API KEY");
 //Bearer.setApiKeyPrefix("Token");
 
 CategoryApi apiInstance = new CategoryApi();
-Object body = null; // Object | 
+CategoryParam body = new CategoryParam(); // CategoryParam | 
 String authorization = "authorization_example"; // String | JWT token for Authorization
 try {
     Category result = apiInstance.apiV1CategoriesPost(body, authorization);
@@ -280,7 +280,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**Object**](Object.md)|  |
+ **body** | [**CategoryParam**](CategoryParam.md)|  |
  **authorization** | **String**| JWT token for Authorization | [optional]
 
 ### Return type
