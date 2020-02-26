@@ -36,6 +36,9 @@ public class PostIndexActivity extends AppCompatActivity
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ImageView mAvatar;
+    private TextView mUsername;
+    private TextView mEmail;
     public static final int POST_FORM_REQUEST = 1;
 
     @Override
@@ -86,9 +89,10 @@ public class PostIndexActivity extends AppCompatActivity
             }
         });
 
+        mAuth = (Auth) getIntent().getSerializableExtra("auth");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(this);
-        mAuth = (Auth) getIntent().getSerializableExtra("auth");
+        buildAvatar(mAuth);
         final Menu menu = mNavigationView.getMenu();
         menu.clear();
 
@@ -198,6 +202,16 @@ public class PostIndexActivity extends AppCompatActivity
                 mList.invalidateViews();
             }
         }
+    }
+
+    private void buildAvatar(Auth auth){
+        View headerLayout = mNavigationView.getHeaderView(0);
+        mAvatar = (ImageView) headerLayout.findViewById(R.id.avatar);
+        mUsername = (TextView) headerLayout.findViewById(R.id.username);
+        mEmail = (TextView) headerLayout.findViewById(R.id.email);
+        Picasso.get().load(auth.getAvatar()).placeholder(R.drawable.contact_picture_placeholder).error(R.drawable.noise).into(mAvatar);
+        mUsername.setText(auth.getUsername());
+        mEmail.setText(auth.getEmail());
     }
 
     private void selectMenu(int position){
