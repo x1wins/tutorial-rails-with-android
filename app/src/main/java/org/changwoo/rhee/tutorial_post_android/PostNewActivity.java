@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
@@ -21,13 +20,6 @@ public class PostNewActivity extends PostFormActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategoryId = getIntent().getIntExtra("categoryId", 0);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.form, menu);
-        return true;
     }
 
     @Override

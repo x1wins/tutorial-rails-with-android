@@ -1,13 +1,11 @@
 package org.changwoo.rhee.tutorial_post_android;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.*;
 import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
@@ -30,6 +28,7 @@ public class PostShowActivity extends AppCompatActivity {
     private ListView mList;
     private EditText mEditText;
     private Button mButton;
+    public static final int POST_EDIT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +84,32 @@ public class PostShowActivity extends AppCompatActivity {
                 asyncTask.execute(mAuth);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.show, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_edit) {
+            Intent intent = new Intent(getApplicationContext(), PostEditActivity.class);
+            intent.putExtra("auth", mAuth);
+            intent.putExtra("post", mPost);
+            startActivityForResult(intent, POST_EDIT_REQUEST);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void buildListView(final Integer postId){
