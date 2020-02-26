@@ -25,6 +25,8 @@ import io.swagger.client.model.*;
 
 import java.util.List;
 
+import static org.changwoo.rhee.tutorial_post_android.RequestCode.POST_NEW_REQUEST;
+
 public class PostIndexActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar mToolbar;
@@ -36,7 +38,6 @@ public class PostIndexActivity extends AppCompatActivity
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    public static final int POST_FORM_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class PostIndexActivity extends AppCompatActivity
                 Intent intent = new Intent(getApplicationContext(), PostNewActivity.class);
                 intent.putExtra("auth", mAuth);
                 intent.putExtra("categoryId", mSelectedCategory.getId());
-                startActivityForResult(intent, POST_FORM_REQUEST);
+                startActivityForResult(intent, POST_NEW_REQUEST);
             }
         });
         mFab.hide();
@@ -189,7 +190,7 @@ public class PostIndexActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == POST_FORM_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == POST_NEW_REQUEST) {
             if (data.hasExtra("post")) {
                 Post post = (Post) data.getSerializableExtra("post");
                 mSelectedCategory.getPosts().add(0, post);
