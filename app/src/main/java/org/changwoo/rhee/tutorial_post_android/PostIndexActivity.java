@@ -59,7 +59,7 @@ public class PostIndexActivity extends AppCompatActivity
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PostFormActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PostNewActivity.class);
                 intent.putExtra("auth", mAuth);
                 intent.putExtra("categoryId", mSelectedCategory.getId());
                 startActivityForResult(intent, POST_FORM_REQUEST);
