@@ -20,6 +20,7 @@
                 android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -30,6 +31,10 @@
         <activity android:name=".PostFormActivity">
         </activity>
         <activity android:name=".PostShowActivity">
+        </activity>
+        <activity
+                android:name=".UserFormActivity"
+                android:label="@string/title_activity_user_form">
         </activity>
     </application>
 
