@@ -3,27 +3,24 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.*;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,13 +31,16 @@ import android.widget.*;
 import io.swagger.client.ApiException;
 import io.swagger.client.ApiResponse;
 import io.swagger.client.api.UserMultipartformDataApi;
-import io.swagger.client.model.*;
+import io.swagger.client.model.User;
+import io.swagger.client.model.UserMultipartParam;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.*;
 
 /**
  * A login screen that offers login via email/password.
@@ -74,6 +74,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
     private Uri mAvatarUri;
     private File mAvatarFile;
     private Button mGallery;
+    private UserMultipartParam mParam;
     private View mProgressView;
     private View mLoginFormView;
     private final static int RESULT_LOAD_IMG = 1;
@@ -188,7 +189,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
     }
 
     /**
-     * Callback received when a permissions request has been completed.
+     * Callback received when a permissions request has been combbbpleted.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -197,9 +198,52 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
             }
+        } else if (requestCode == PERMISSION_REQUEST_CODE) {
+            openActivity();
         }
     }
 
+    private static final int PERMISSION_REQUEST_CODE = 200;
+    private boolean checkPermission() {
+
+        return ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                ;
+    }
+
+    private void requestPermissionAndContinue() {
+        if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, WRITE_EXTERNAL_STORAGE)
+                    && ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+                alertBuilder.setCancelable(true);
+                alertBuilder.setTitle(getString(R.string.permission_necessary));
+                alertBuilder.setMessage(R.string.storage_permission_is_encessary_to_wrote_event);
+                alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(UserFormActivity.this, new String[]{WRITE_EXTERNAL_STORAGE
+                                , READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                    }
+                });
+                AlertDialog alert = alertBuilder.create();
+                alert.show();
+                Log.e("", "permission denied, show dialog");
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE,
+                        READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            openActivity();
+        }
+    }
+
+    private void openActivity(){
+        mJoinTask = new UserJoinTask();
+        mJoinTask.execute(mParam);
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -251,9 +295,17 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             String name = mName.getText().toString();
             String username = mUsername.getText().toString();
             String passwordConfirm = mPasswordConfirmView.getText().toString();
-            UserMultipartParam param = new UserMultipartParam(name, username, email, password, passwordConfirm, mAvatarFile);
-            mJoinTask = new UserJoinTask();
-            mJoinTask.execute(param);
+            mParam = new UserMultipartParam(name, username, email, password, passwordConfirm, mAvatarFile);
+
+            if (!checkPermission()) {
+                openActivity();
+            } else {
+                if (checkPermission()) {
+                    requestPermissionAndContinue();
+                } else {
+                    openActivity();
+                }
+            }
         }
     }
 

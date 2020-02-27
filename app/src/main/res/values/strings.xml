@@ -8,6 +8,9 @@
     <string name="action_signout">Sign Out</string>
     <string name="title_activity_login">Sign in</string>
 
+    <string name="permission_necessary">read, write permission</string>
+    <string name="storage_permission_is_encessary_to_wrote_event">I need read, write permission</string>
+
     <!-- Strings related to login -->
     <string name="prompt_name">Name</string>
     <string name="prompt_username">Username</string>
