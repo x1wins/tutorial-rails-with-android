@@ -95,6 +95,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mSignUpButton = (Button) findViewById(R.id.sign_up_button);
+        mSignUpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptJoin();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -145,6 +153,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    private void attemptJoin() {
+        Intent intent = new Intent(getApplicationContext(), UserFormActivity.class);
+        startActivity(intent);
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
