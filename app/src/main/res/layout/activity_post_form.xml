@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="org.changwoo.rhee.tutorial_post_android.PostFormActivity">
+        tools:context="org.changwoo.rhee.tutorial_post_android.PostNewActivity">
     <EditText
             android:id="@+id/title"
             android:hint="Enter Title"

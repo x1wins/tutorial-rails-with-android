@@ -23,11 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-                android:name=".PostIndexActivity"
-                android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".PostIndexActivity" android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".PostFormActivity">
+        <activity android:name=".PostNewActivity">
+        </activity>
+        <activity android:name=".PostEditActivity">
         </activity>
         <activity android:name=".PostShowActivity">
         </activity>
