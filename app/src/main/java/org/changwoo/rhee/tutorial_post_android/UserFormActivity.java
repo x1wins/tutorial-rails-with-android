@@ -1,11 +1,14 @@
 package org.changwoo.rhee.tutorial_post_android;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.*;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,8 +21,6 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,7 +41,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.Manifest.permission.*;
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 /**
  * A login screen that offers login via email/password.
@@ -51,6 +53,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private static final int REQUEST_READ_EXTERNAL_STORAGE = 200;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -129,6 +132,10 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             return;
         }
 
+        if (!mayRequestReadStorage()) {
+            return;
+        }
+
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -151,6 +158,31 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }
+
+        return false;
+    }
+
+    private boolean mayRequestReadStorage() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+
+        if (checkSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            Snackbar.make(mEmailView, R.string.storage_permission_is_encessary_to_wrote_event, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
+        }
+
         return false;
     }
 
@@ -198,51 +230,13 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
             }
-        } else if (requestCode == PERMISSION_REQUEST_CODE) {
-            openActivity();
         }
-    }
 
-    private static final int PERMISSION_REQUEST_CODE = 200;
-    private boolean checkPermission() {
-
-        return ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                ;
-    }
-
-    private void requestPermissionAndContinue() {
-        if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, WRITE_EXTERNAL_STORAGE)
-                    && ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
-                alertBuilder.setCancelable(true);
-                alertBuilder.setTitle(getString(R.string.permission_necessary));
-                alertBuilder.setMessage(R.string.storage_permission_is_encessary_to_wrote_event);
-                alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(UserFormActivity.this, new String[]{WRITE_EXTERNAL_STORAGE
-                                , READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-                    }
-                });
-                AlertDialog alert = alertBuilder.create();
-                alert.show();
-                Log.e("", "permission denied, show dialog");
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{WRITE_EXTERNAL_STORAGE,
-                        READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        if (requestCode == REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                populateAutoComplete();
             }
-        } else {
-            openActivity();
         }
-    }
-
-    private void openActivity(){
-        mJoinTask = new UserJoinTask();
-        mJoinTask.execute(mParam);
     }
 
     /**
@@ -296,16 +290,8 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             String username = mUsername.getText().toString();
             String passwordConfirm = mPasswordConfirmView.getText().toString();
             mParam = new UserMultipartParam(name, username, email, password, passwordConfirm, mAvatarFile);
-
-            if (!checkPermission()) {
-                openActivity();
-            } else {
-                if (checkPermission()) {
-                    requestPermissionAndContinue();
-                } else {
-                    openActivity();
-                }
-            }
+            mJoinTask = new UserJoinTask();
+            mJoinTask.execute(mParam);
         }
     }
 
