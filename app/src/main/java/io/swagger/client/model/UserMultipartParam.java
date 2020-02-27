@@ -12,27 +12,25 @@
 
 package io.swagger.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.IOException;
+
+import java.io.File;
+import java.util.Objects;
+
 /**
  * UserParam
  */
 
 
-public class UserParam {
-  public UserParam(String name, String username, String email, String password, String passwordConfirmation) {
+public class UserMultipartParam {
+  public UserMultipartParam(String name, String username, String email, String password, String passwordConfirmation, File avatar) {
     this.name = name;
     this.username = username;
     this.email = email;
     this.password = password;
     this.passwordConfirmation = passwordConfirmation;
+    this.avatar = avatar;
   }
 
   @SerializedName("name")
@@ -50,7 +48,10 @@ public class UserParam {
   @SerializedName("password_confirmation")
   private String passwordConfirmation = null;
 
-  public UserParam name(String name) {
+  @SerializedName("avatar")
+  private File avatar;
+
+  public UserMultipartParam name(String name) {
     this.name = name;
     return this;
   }
@@ -68,7 +69,7 @@ public class UserParam {
     this.name = name;
   }
 
-  public UserParam username(String username) {
+  public UserMultipartParam username(String username) {
     this.username = username;
     return this;
   }
@@ -86,7 +87,7 @@ public class UserParam {
     this.username = username;
   }
 
-  public UserParam email(String email) {
+  public UserMultipartParam email(String email) {
     this.email = email;
     return this;
   }
@@ -104,7 +105,7 @@ public class UserParam {
     this.email = email;
   }
 
-  public UserParam password(String password) {
+  public UserMultipartParam password(String password) {
     this.password = password;
     return this;
   }
@@ -122,7 +123,7 @@ public class UserParam {
     this.password = password;
   }
 
-  public UserParam passwordConfirmation(String passwordConfirmation) {
+  public UserMultipartParam passwordConfirmation(String passwordConfirmation) {
     this.passwordConfirmation = passwordConfirmation;
     return this;
   }
@@ -140,16 +141,23 @@ public class UserParam {
     this.passwordConfirmation = passwordConfirmation;
   }
 
+  public File getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(File avatar) {
+    this.avatar = avatar;
+  }
 
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserParam userParam = (UserParam) o;
+    UserMultipartParam userParam = (UserMultipartParam) o;
     return Objects.equals(this.name, userParam.name) &&
         Objects.equals(this.username, userParam.username) &&
         Objects.equals(this.email, userParam.email) &&
@@ -167,12 +175,13 @@ public class UserParam {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserParam {\n");
-    
+
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    passwordConfirmation: ").append(toIndentedString(passwordConfirmation)).append("\n");
+    sb.append("    avatar: ").append(toIndentedString(avatar)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -181,7 +190,7 @@ public class UserParam {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }
