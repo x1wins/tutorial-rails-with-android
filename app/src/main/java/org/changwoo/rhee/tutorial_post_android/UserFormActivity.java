@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import io.swagger.client.ApiException;
+import io.swagger.client.ApiResponse;
 import io.swagger.client.api.UserMultipartformDataApi;
 import io.swagger.client.model.User;
 import io.swagger.client.model.UserMultipartParam;
@@ -397,11 +398,11 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserJoinTask extends AsyncTask<UserMultipartParam, Void, User> {
+    public class UserJoinTask extends AsyncTask<UserMultipartParam, Void, ApiResponse<User>> {
 
         @Override
-        protected User doInBackground(UserMultipartParam... params) {
-            User result = null;
+        protected ApiResponse<User> doInBackground(UserMultipartParam... params) {
+            ApiResponse<User> result = null;
             UserMultipartformDataApi apiInstance = new UserMultipartformDataApi();
             UserMultipartParam param = params[0];
             String userName = param.getName();
@@ -412,7 +413,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             File userAvatar = param.getAvatar();
             try {
                 Log.d(this.getClass().toString(), params.toString());
-                result = apiInstance.apiV1UsersPost(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
+                result = apiInstance.apiV1UsersPostWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
                 Log.d(this.getClass().toString(), result.toString());
             } catch (ApiException e) {
                 Log.d(this.getClass().toString(), e.toString());
@@ -421,7 +422,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         }
 
         @Override
-        protected void onPostExecute(final User userResponse) {
+        protected void onPostExecute(final ApiResponse<User> userResponse) {
             mJoinTask = null;
             showProgress(false);
         }
