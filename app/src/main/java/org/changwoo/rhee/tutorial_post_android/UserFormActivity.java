@@ -425,6 +425,18 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         protected void onPostExecute(final ApiResponse<User> userResponse) {
             mJoinTask = null;
             showProgress(false);
+
+            if(userResponse == null){
+                //TODO error
+            }
+
+            if(userResponse.getStatusCode() == 201){
+                finish();
+            }else if(userResponse.getStatusCode() == 422){
+                //TODO error
+            }else{
+                //TODO error
+            }
         }
 
         @Override
