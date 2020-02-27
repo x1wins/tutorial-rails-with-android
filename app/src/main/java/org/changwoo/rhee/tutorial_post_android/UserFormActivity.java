@@ -3,6 +3,7 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -34,9 +36,7 @@ import io.swagger.client.ApiResponse;
 import io.swagger.client.api.UserMultipartformDataApi;
 import io.swagger.client.model.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,12 +161,12 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
                 mAvatarUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(mAvatarUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                String path = getRealPathFromURI(mAvatarUri);
-                mAvatarFile = new File(path);
                 mAvatar.setImageBitmap(selectedImage);
+                String path = getPathFromCameraData(data, this);
+                mAvatarFile = new File(path);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Ssssomething went wrong", Toast.LENGTH_LONG).show();
             }
 
         }else {
@@ -174,20 +174,17 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         }
     }
 
-    // And to convert the image URI to the direct file system path of the image file
-    public String getRealPathFromURI(Uri contentUri) {
-
-        // can post image
-        String [] proj={MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery( contentUri,
-                proj, // Which columns to return
-                null,       // WHERE clause; which rows to return (all rows)
-                null,       // WHERE clause selection arguments (none)
-                null); // Order-by clause (ascending by name)
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+    //The string used to get the file(image) location
+    public static String getPathFromCameraData(Intent data, Context context) {
+        Uri selectedImage = data.getData();
+        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver().query(selectedImage,
+                filePathColumn, null, null, null);
         cursor.moveToFirst();
-
-        return cursor.getString(column_index);
+        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+        String picturePath = cursor.getString(columnIndex);
+        cursor.close();
+        return picturePath;
     }
 
     /**
