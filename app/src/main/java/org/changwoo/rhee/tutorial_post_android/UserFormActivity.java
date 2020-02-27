@@ -30,7 +30,6 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import io.swagger.client.ApiException;
-import io.swagger.client.ApiResponse;
 import io.swagger.client.api.UserMultipartformDataApi;
 import io.swagger.client.model.User;
 import io.swagger.client.model.UserMultipartParam;
@@ -77,7 +76,6 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
     private Uri mAvatarUri;
     private File mAvatarFile;
     private Button mGallery;
-    private UserMultipartParam mParam;
     private View mProgressView;
     private View mLoginFormView;
     private final static int RESULT_LOAD_IMG = 1;
@@ -289,9 +287,9 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             String name = mName.getText().toString();
             String username = mUsername.getText().toString();
             String passwordConfirm = mPasswordConfirmView.getText().toString();
-            mParam = new UserMultipartParam(name, username, email, password, passwordConfirm, mAvatarFile);
+            UserMultipartParam param = new UserMultipartParam(name, username, email, password, passwordConfirm, mAvatarFile);
             mJoinTask = new UserJoinTask();
-            mJoinTask.execute(mParam);
+            mJoinTask.execute(param);
         }
     }
 
@@ -399,11 +397,11 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserJoinTask extends AsyncTask<UserMultipartParam, Void, ApiResponse<User>> {
+    public class UserJoinTask extends AsyncTask<UserMultipartParam, Void, User> {
 
         @Override
-        protected ApiResponse<User> doInBackground(UserMultipartParam... params) {
-            ApiResponse<User> result = null;
+        protected User doInBackground(UserMultipartParam... params) {
+            User result = null;
             UserMultipartformDataApi apiInstance = new UserMultipartformDataApi();
             UserMultipartParam param = params[0];
             String userName = param.getName();
@@ -413,7 +411,8 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             String userPasswordConfirmation = param.getPasswordConfirmation();
             File userAvatar = param.getAvatar();
             try {
-                result = apiInstance.apiV1UsersPostWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
+                Log.d(this.getClass().toString(), params.toString());
+                result = apiInstance.apiV1UsersPost(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
                 Log.d(this.getClass().toString(), result.toString());
             } catch (ApiException e) {
                 Log.d(this.getClass().toString(), e.toString());
@@ -422,7 +421,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         }
 
         @Override
-        protected void onPostExecute(final ApiResponse<User> apiResponse) {
+        protected void onPostExecute(final User userResponse) {
             mJoinTask = null;
             showProgress(false);
         }

@@ -181,6 +181,7 @@ public class UserMultipartParam {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("    passwordConfirmation: ").append(toIndentedString(passwordConfirmation)).append("\n");
+    sb.append("    avatar: ").append(toIndentedString(avatar)).append("\n");
     sb.append("}");
     return sb.toString();
   }
