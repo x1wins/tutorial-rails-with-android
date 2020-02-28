@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import io.swagger.client.model.Auth;
 
 public abstract class PostFormActivity extends AppCompatActivity {
     protected Auth mAuth;
     protected EditText mTitle;
     protected EditText mBody;
+    protected KProgressHUD mKProgressHUD;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +22,13 @@ public abstract class PostFormActivity extends AppCompatActivity {
         mTitle = (EditText) findViewById(R.id.title);
         mBody = (EditText) findViewById(R.id.body);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
+        mKProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("Please wait")
+                .setDetailsLabel("Downloading data")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
     }
 
     @Override

@@ -78,6 +78,7 @@ public class PostEditActivity extends PostFormActivity {
             @Override
             protected void onPostExecute(Post postResponse) {
                 super.onPostExecute(postResponse);
+                mKProgressHUD.dismiss();
                 Intent data = new Intent();
                 data.putExtra("post", postResponse);
                 setResult(RESULT_OK, data);
@@ -85,5 +86,6 @@ public class PostEditActivity extends PostFormActivity {
             }
         };
         asyncTask.execute(mAuth);
+        mKProgressHUD.show();
     }
 }
