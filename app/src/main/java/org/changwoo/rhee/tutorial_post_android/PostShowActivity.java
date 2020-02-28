@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
@@ -30,6 +31,7 @@ public class PostShowActivity extends AppCompatActivity {
     private ListView mList;
     private EditText mEditText;
     private Button mButton;
+    private KProgressHUD mKProgressHUD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,13 @@ public class PostShowActivity extends AppCompatActivity {
         mEditText = (EditText) findViewById(R.id.edittext_chatbox);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mButton = (Button) findViewById(R.id.button_chatbox_send);
+        mKProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("Please wait")
+                .setDetailsLabel("Downloading data")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
         buildListView(mPostId);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +86,14 @@ public class PostShowActivity extends AppCompatActivity {
                     @Override
                     protected void onPostExecute(Comment commentResponse) {
                         super.onPostExecute(commentResponse);
+                        mKProgressHUD.dismiss();
                         mEditText.setText("");
                         mPost.getComments().add(0, commentResponse);
                         mList.invalidateViews();
                     }
                 };
                 asyncTask.execute(mAuth);
+                mKProgressHUD.show();
             }
         });
     }
@@ -138,12 +149,14 @@ public class PostShowActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Post postResponse) {
                 super.onPostExecute(postResponse);
+                mKProgressHUD.dismiss();
                 mPost = postResponse;
                 getSupportActionBar().setTitle(mPost.getTitle());
                 buildAdapter(mPost);
             }
         };
         asyncTask.execute(mAuth);
+        mKProgressHUD.show();
     }
 
     private void buildAdapter(final Post post){
