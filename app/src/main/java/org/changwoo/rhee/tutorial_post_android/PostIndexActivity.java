@@ -110,6 +110,11 @@ public class PostIndexActivity extends AppCompatActivity
 
         AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
+            @Override
             protected Categories doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -130,7 +135,6 @@ public class PostIndexActivity extends AppCompatActivity
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(Categories categoriesResponse) {
                 super.onPostExecute(categoriesResponse);
@@ -146,9 +150,13 @@ public class PostIndexActivity extends AppCompatActivity
                 selectMenu(0);
                 mFab.show();
             }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
+            }
         };
         asyncTask.execute(mAuth);
-        mKProgressHUD.show();
     }
 
     @Override
@@ -238,6 +246,11 @@ public class PostIndexActivity extends AppCompatActivity
     private void buildListView(final Integer categoryId){
         AsyncTask<Auth, Void, List<Post>> asyncTask = new AsyncTask<Auth, Void, List<Post>>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
+            @Override
             protected List<Post> doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -259,7 +272,6 @@ public class PostIndexActivity extends AppCompatActivity
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(List<Post> postsResponse) {
                 super.onPostExecute(postsResponse);
@@ -268,9 +280,13 @@ public class PostIndexActivity extends AppCompatActivity
                 buildAdapter(postsResponse);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
+            }
         };
         asyncTask.execute(mAuth);
-        mKProgressHUD.show();
     }
 
     private void buildAdapter(final List<Post> posts){

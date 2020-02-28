@@ -55,6 +55,11 @@ public class PostEditActivity extends PostFormActivity {
 
         AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
+            @Override
             protected Post doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -74,7 +79,6 @@ public class PostEditActivity extends PostFormActivity {
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(Post postResponse) {
                 super.onPostExecute(postResponse);
@@ -84,8 +88,12 @@ public class PostEditActivity extends PostFormActivity {
                 setResult(RESULT_OK, data);
                 finish();
             }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
+            }
         };
         asyncTask.execute(mAuth);
-        mKProgressHUD.show();
     }
 }

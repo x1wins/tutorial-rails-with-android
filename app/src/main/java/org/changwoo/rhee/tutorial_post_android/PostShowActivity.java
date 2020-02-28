@@ -63,6 +63,11 @@ public class PostShowActivity extends AppCompatActivity {
 
                 AsyncTask<Auth, Void, Comment> asyncTask = new AsyncTask<Auth, Void, Comment>() {
                     @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        mKProgressHUD.show();
+                    }
+                    @Override
                     protected Comment doInBackground(Auth... auth) {
                         String authorization = auth[0].getToken();
                         ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -82,7 +87,6 @@ public class PostShowActivity extends AppCompatActivity {
                             return null;
                         }
                     }
-
                     @Override
                     protected void onPostExecute(Comment commentResponse) {
                         super.onPostExecute(commentResponse);
@@ -91,9 +95,13 @@ public class PostShowActivity extends AppCompatActivity {
                         mPost.getComments().add(0, commentResponse);
                         mList.invalidateViews();
                     }
+                    @Override
+                    protected void onCancelled() {
+                        super.onCancelled();
+                        mKProgressHUD.dismiss();
+                    }
                 };
                 asyncTask.execute(mAuth);
-                mKProgressHUD.show();
             }
         });
     }
@@ -127,6 +135,10 @@ public class PostShowActivity extends AppCompatActivity {
     private void buildListView(final Integer postId){
         AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
             @Override
+            protected void onPreExecute() {
+                mKProgressHUD.show();
+            }
+            @Override
             protected Post doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -145,7 +157,6 @@ public class PostShowActivity extends AppCompatActivity {
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(Post postResponse) {
                 super.onPostExecute(postResponse);
@@ -154,9 +165,13 @@ public class PostShowActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(mPost.getTitle());
                 buildAdapter(mPost);
             }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
+            }
         };
         asyncTask.execute(mAuth);
-        mKProgressHUD.show();
     }
 
     private void buildAdapter(final Post post){
