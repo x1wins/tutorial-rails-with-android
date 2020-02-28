@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
@@ -41,6 +42,7 @@ public class PostIndexActivity extends AppCompatActivity
     private ImageView mAvatar;
     private TextView mUsername;
     private TextView mEmail;
+    private KProgressHUD mKProgressHUD;
     public static final int POST_FORM_REQUEST = 1;
 
     @Override
@@ -98,6 +100,14 @@ public class PostIndexActivity extends AppCompatActivity
         final Menu menu = mNavigationView.getMenu();
         menu.clear();
 
+        mKProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("Please wait")
+                .setDetailsLabel("Downloading data")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
         AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
             @Override
             protected Categories doInBackground(Auth... auth) {
@@ -124,6 +134,7 @@ public class PostIndexActivity extends AppCompatActivity
             @Override
             protected void onPostExecute(Categories categoriesResponse) {
                 super.onPostExecute(categoriesResponse);
+                mKProgressHUD.dismiss();
                 final Menu menu = mNavigationView.getMenu();
                 mCategories = categoriesResponse.getCategories();
                 for (int i = 0; i < mCategories.size(); i++) {
@@ -137,6 +148,7 @@ public class PostIndexActivity extends AppCompatActivity
             }
         };
         asyncTask.execute(mAuth);
+        mKProgressHUD.show();
     }
 
     @Override
@@ -251,12 +263,14 @@ public class PostIndexActivity extends AppCompatActivity
             @Override
             protected void onPostExecute(List<Post> postsResponse) {
                 super.onPostExecute(postsResponse);
+                mKProgressHUD.dismiss();
                 getSupportActionBar().setTitle(mSelectedCategory.getTitle());
                 buildAdapter(postsResponse);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         };
         asyncTask.execute(mAuth);
+        mKProgressHUD.show();
     }
 
     private void buildAdapter(final List<Post> posts){
