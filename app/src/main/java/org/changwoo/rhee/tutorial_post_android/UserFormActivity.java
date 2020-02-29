@@ -47,7 +47,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 /**
  * A login screen that offers login via email/password.
  */
-public class UserFormActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public abstract class UserFormActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -62,24 +62,19 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserJoinTask mJoinTask = null;
 
     // UI references.
-    private EditText mName;
-    private EditText mUsername;
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private EditText mPasswordConfirmView;
-    private ImageView mAvatar;
-    private Uri mAvatarUri;
-    private File mAvatarFile;
-    private Button mGallery;
-    private View mProgressView;
-    private View mLoginFormView;
-    private final static int RESULT_LOAD_IMG = 1;
+    protected EditText mName;
+    protected EditText mUsername;
+    protected AutoCompleteTextView mEmailView;
+    protected EditText mPasswordView;
+    protected EditText mPasswordConfirmView;
+    protected ImageView mAvatar;
+    protected File mAvatarFile;
+    protected Button mGallery;
+    protected View mProgressView;
+    protected View mLoginFormView;
+    protected final static int RESULT_LOAD_IMG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,8 +185,8 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         super.onActivityResult(reqCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             try {
-                mAvatarUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(mAvatarUri);
+                Uri avatarUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(avatarUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 mAvatar.setImageBitmap(selectedImage);
                 String path = getPathFromCameraData(data, this);
@@ -244,10 +239,6 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
      * errors are presented and no actual login attempt is made.
      */
     private void attemptJoin() {
-        if (mJoinTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -289,8 +280,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
             String username = mUsername.getText().toString();
             String passwordConfirm = mPasswordConfirmView.getText().toString();
             UserMultipartParam param = new UserMultipartParam(name, username, email, password, passwordConfirm, mAvatarFile);
-            mJoinTask = new UserJoinTask();
-            mJoinTask.execute(param);
+            sendUser(param);
         }
     }
 
@@ -308,7 +298,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    protected void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -377,7 +367,7 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(UserFormActivity.this,
+                new ArrayAdapter<>(this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);
@@ -394,56 +384,6 @@ public class UserFormActivity extends AppCompatActivity implements LoaderCallbac
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserJoinTask extends AsyncTask<UserMultipartParam, Void, ApiResponse<User>> {
-
-        @Override
-        protected ApiResponse<User> doInBackground(UserMultipartParam... params) {
-            ApiResponse<User> result = null;
-            UserMultipartformDataApi apiInstance = new UserMultipartformDataApi();
-            UserMultipartParam param = params[0];
-            String userName = param.getName();
-            String userUsername = param.getUsername();
-            String userEmail = param.getEmail();
-            String userPassword = param.getPassword();
-            String userPasswordConfirmation = param.getPasswordConfirmation();
-            File userAvatar = param.getAvatar();
-            try {
-                Log.d(this.getClass().toString(), params.toString());
-                result = apiInstance.apiV1UsersPostWithHttpInfo(userName, userUsername, userEmail, userPassword, userPasswordConfirmation, userAvatar);
-                Log.d(this.getClass().toString(), result.toString());
-            } catch (ApiException e) {
-                Log.d(this.getClass().toString(), e.toString());
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(final ApiResponse<User> userResponse) {
-            mJoinTask = null;
-            showProgress(false);
-
-            if(userResponse == null){
-                //TODO error
-            }
-
-            if(userResponse.getStatusCode() == 201){
-                finish();
-            }else if(userResponse.getStatusCode() == 422){
-                //TODO error
-            }else{
-                //TODO error
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mJoinTask = null;
-            showProgress(false);
-        }
-    }
+    abstract void sendUser(UserMultipartParam param);
 }
 

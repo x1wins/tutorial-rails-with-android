@@ -32,7 +32,9 @@
         </activity>
         <activity android:name=".PostShowActivity">
         </activity>
-        <activity android:name=".UserFormActivity" android:label="@string/title_activity_user_form">
+        <activity android:name=".UserNewActivity" android:label="@string/title_activity_user_new">
+        </activity>
+        <activity android:name=".UserEditActivity" android:label="@string/title_activity_user_edit">
         </activity>
     </application>
 

@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void attemptJoin() {
-        Intent intent = new Intent(getApplicationContext(), UserFormActivity.class);
+        Intent intent = new Intent(getApplicationContext(), UserNewActivity.class);
         startActivity(intent);
     }
 
