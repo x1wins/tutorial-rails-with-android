@@ -203,3 +203,8 @@ https://lucasr.org/2012/04/05/performance-tips-for-androids-listview/
 ```
 
 
+#### Memory leak
+https://medium.com/@akhilgupta.me/asynctask-memory-leaks-170f4a21b16f
+
+#### Thread vs Handler vs AsyncTask
+https://stackoverflow.com/questions/6964011/handler-vs-asynctask-vs-thread

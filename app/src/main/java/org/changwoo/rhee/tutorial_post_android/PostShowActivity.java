@@ -109,7 +109,10 @@ public class PostShowActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.show, menu);
+        String email = mAuth.getEmail();
+        if(mPost !=null && Owner.is(email, mPost)){
+            getMenuInflater().inflate(R.menu.show, menu);
+        }
         return true;
     }
 
@@ -162,6 +165,7 @@ public class PostShowActivity extends AppCompatActivity {
                 super.onPostExecute(postResponse);
                 mKProgressHUD.dismiss();
                 mPost = postResponse;
+                invalidateOptionsMenu();
                 getSupportActionBar().setTitle(mPost.getTitle());
                 buildAdapter(mPost);
             }
