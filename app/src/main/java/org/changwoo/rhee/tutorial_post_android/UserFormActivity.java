@@ -373,7 +373,6 @@ public abstract class UserFormActivity extends AppCompatActivity implements Load
         mEmailView.setAdapter(adapter);
     }
 
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
