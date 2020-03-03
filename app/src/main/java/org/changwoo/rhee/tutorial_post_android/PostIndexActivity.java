@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.kaopiz.kprogresshud.KProgressHUD;
 import com.squareup.picasso.Picasso;
 import io.swagger.client.ApiClient;
 import io.swagger.client.ApiException;
@@ -41,6 +42,7 @@ public class PostIndexActivity extends AppCompatActivity
     private ImageView mAvatar;
     private TextView mUsername;
     private TextView mEmail;
+    private KProgressHUD mKProgressHUD;
     public static final int POST_FORM_REQUEST = 1;
 
     @Override
@@ -98,7 +100,20 @@ public class PostIndexActivity extends AppCompatActivity
         final Menu menu = mNavigationView.getMenu();
         menu.clear();
 
+        mKProgressHUD = KProgressHUD.create(this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel("Please wait")
+                .setDetailsLabel("Downloading data")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+
         AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
             @Override
             protected Categories doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
@@ -120,10 +135,10 @@ public class PostIndexActivity extends AppCompatActivity
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(Categories categoriesResponse) {
                 super.onPostExecute(categoriesResponse);
+                mKProgressHUD.dismiss();
                 final Menu menu = mNavigationView.getMenu();
                 mCategories = categoriesResponse.getCategories();
                 for (int i = 0; i < mCategories.size(); i++) {
@@ -134,6 +149,11 @@ public class PostIndexActivity extends AppCompatActivity
                 }
                 selectMenu(0);
                 mFab.show();
+            }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
             }
         };
         asyncTask.execute(mAuth);
@@ -226,6 +246,11 @@ public class PostIndexActivity extends AppCompatActivity
     private void buildListView(final Integer categoryId){
         AsyncTask<Auth, Void, List<Post>> asyncTask = new AsyncTask<Auth, Void, List<Post>>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
+            @Override
             protected List<Post> doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -247,13 +272,18 @@ public class PostIndexActivity extends AppCompatActivity
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(List<Post> postsResponse) {
                 super.onPostExecute(postsResponse);
+                mKProgressHUD.dismiss();
                 getSupportActionBar().setTitle(mSelectedCategory.getTitle());
                 buildAdapter(postsResponse);
                 mSwipeRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
             }
         };
         asyncTask.execute(mAuth);

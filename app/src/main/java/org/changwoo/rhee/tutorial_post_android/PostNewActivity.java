@@ -46,6 +46,11 @@ public class PostNewActivity extends PostFormActivity {
 
         AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
+            @Override
             protected Post doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
@@ -63,14 +68,19 @@ public class PostNewActivity extends PostFormActivity {
                     return null;
                 }
             }
-
             @Override
             protected void onPostExecute(Post postResponse) {
                 super.onPostExecute(postResponse);
+                mKProgressHUD.dismiss();
                 Intent data = new Intent();
                 data.putExtra("post", postResponse);
                 setResult(RESULT_OK, data);
                 finish();
+            }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
             }
         };
         asyncTask.execute(mAuth);
