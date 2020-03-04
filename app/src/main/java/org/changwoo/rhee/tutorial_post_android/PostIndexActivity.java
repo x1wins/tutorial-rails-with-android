@@ -43,6 +43,7 @@ public class PostIndexActivity extends AppCompatActivity
     private TextView mUsername;
     private TextView mEmail;
     private KProgressHUD mKProgressHUD;
+    private boolean lastItemVisibleFlag;
     public static final int POST_FORM_REQUEST = 1;
 
     @Override
@@ -92,6 +93,19 @@ public class PostIndexActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+        mList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount;
+            }
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
+                    Integer categoryId = mSelectedCategory.getId();
+                    buildListView(categoryId);
+                }
+            }
+        });
 
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -122,7 +136,7 @@ public class PostIndexActivity extends AppCompatActivity
                 Bearer.setApiKey(authorization);
                 CategoryApi apiInstance = new CategoryApi();
                 Integer page = 1;
-                Integer per = 10; // Integer | Per page number
+                Integer per = 20; // Integer | Per page number
                 Integer postPage = 1; // Integer | Page number for Post
                 Integer postPer = 40; // Integer | Per page number For Post
                 try {
@@ -258,7 +272,7 @@ public class PostIndexActivity extends AppCompatActivity
                 Bearer.setApiKey(authorization);
                 PostApi apiInstance = new PostApi();
                 Integer page = 1;
-                Integer per = 10;
+                Integer per = 20;
                 Integer commentPage = 1;
                 Integer commentPer = 0;
                 String search = null;
