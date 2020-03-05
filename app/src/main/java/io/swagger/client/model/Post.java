@@ -12,13 +12,21 @@
 
 package io.swagger.client.model;
 
+import java.util.Objects;
+import java.util.Arrays;
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import io.swagger.client.model.Category;
+import io.swagger.client.model.Comment;
+import io.swagger.client.model.Pagination;
+import io.swagger.client.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.io.Serializable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 /**
  * Post
  */
@@ -27,6 +35,12 @@ import java.util.Objects;
 public class Post implements Serializable {
   @SerializedName("id")
   private Integer id = null;
+
+  @SerializedName("created_at")
+  private String createdAt = null;
+
+  @SerializedName("updated_at")
+  private String updatedAt = null;
 
   @SerializedName("title")
   private String title = null;
@@ -65,6 +79,42 @@ public class Post implements Serializable {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public Post createdAt(String createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+   /**
+   * Get createdAt
+   * @return createdAt
+  **/
+  @Schema(description = "")
+  public String getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public Post updatedAt(String updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+   /**
+   * Get updatedAt
+   * @return updatedAt
+  **/
+  @Schema(description = "")
+  public String getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(String updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
   public Post title(String title) {
@@ -220,6 +270,8 @@ public class Post implements Serializable {
     }
     Post post = (Post) o;
     return Objects.equals(this.id, post.id) &&
+        Objects.equals(this.createdAt, post.createdAt) &&
+        Objects.equals(this.updatedAt, post.updatedAt) &&
         Objects.equals(this.title, post.title) &&
         Objects.equals(this.body, post.body) &&
         Objects.equals(this.user, post.user) &&
@@ -231,7 +283,7 @@ public class Post implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, body, user, category, files, comments, commentsPagination);
+    return Objects.hash(id, createdAt, updatedAt, title, body, user, category, files, comments, commentsPagination);
   }
 
 
@@ -241,6 +293,8 @@ public class Post implements Serializable {
     sb.append("class Post {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    body: ").append(toIndentedString(body)).append("\n");
     sb.append("    user: ").append(toIndentedString(user)).append("\n");

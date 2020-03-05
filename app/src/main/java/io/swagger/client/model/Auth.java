@@ -28,6 +28,9 @@ import java.io.IOException;
 
 
 public class Auth implements Serializable {
+  @SerializedName("id")
+  private Integer id = null;
+
   @SerializedName("token")
   private String token = null;
 
@@ -42,6 +45,24 @@ public class Auth implements Serializable {
 
   @SerializedName("avatar")
   private String avatar = null;
+
+  public Auth id(Integer id) {
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @Schema(description = "")
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
   public Auth token(String token) {
     this.token = token;
@@ -143,7 +164,8 @@ public class Auth implements Serializable {
       return false;
     }
     Auth auth = (Auth) o;
-    return Objects.equals(this.token, auth.token) &&
+    return Objects.equals(this.id, auth.id) &&
+        Objects.equals(this.token, auth.token) &&
         Objects.equals(this.exp, auth.exp) &&
         Objects.equals(this.username, auth.username) &&
         Objects.equals(this.email, auth.email) &&
@@ -152,7 +174,7 @@ public class Auth implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(token, exp, username, email, avatar);
+    return Objects.hash(id, token, exp, username, email, avatar);
   }
 
 
@@ -161,6 +183,7 @@ public class Auth implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class Auth {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("    exp: ").append(toIndentedString(exp)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
