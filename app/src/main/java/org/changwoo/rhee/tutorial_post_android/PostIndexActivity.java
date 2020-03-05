@@ -24,6 +24,7 @@ import io.swagger.client.api.PostApi;
 import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.changwoo.rhee.tutorial_post_android.RequestCode.POST_NEW_REQUEST;
@@ -36,6 +37,9 @@ public class PostIndexActivity extends AppCompatActivity
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
     private ListView mList;
+    private Integer mNextPage;
+    private Integer mCurrentPage;
+    private Integer mTotalPage;
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -43,7 +47,7 @@ public class PostIndexActivity extends AppCompatActivity
     private TextView mUsername;
     private TextView mEmail;
     private KProgressHUD mKProgressHUD;
-    private boolean lastItemVisibleFlag;
+    private LoadMore mLoadMore;
     public static final int POST_FORM_REQUEST = 1;
 
     @Override
@@ -58,7 +62,8 @@ public class PostIndexActivity extends AppCompatActivity
                 public void onRefresh() {
                     Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
                     Integer categoryId = mSelectedCategory.getId();
-                    buildListView(categoryId);
+                    resetAdapter();
+                    executePostsAsync(categoryId);
                 }
             }
         );
@@ -93,19 +98,6 @@ public class PostIndexActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
-        mList.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                lastItemVisibleFlag = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount);
-            }
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-                    Integer categoryId = mSelectedCategory.getId();
-                    buildListView(categoryId);
-                }
-            }
-        });
 
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -122,55 +114,8 @@ public class PostIndexActivity extends AppCompatActivity
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
 
-        AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mKProgressHUD.show();
-            }
-            @Override
-            protected Categories doInBackground(Auth... auth) {
-                String authorization = auth[0].getToken();
-                ApiClient defaultClient = Configuration.getDefaultApiClient();
-                ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
-                Bearer.setApiKey(authorization);
-                CategoryApi apiInstance = new CategoryApi();
-                Integer page = 1;
-                Integer per = 20; // Integer | Per page number
-                Integer postPage = 1; // Integer | Page number for Post
-                Integer postPer = 40; // Integer | Per page number For Post
-                try {
-                    Categories result = apiInstance.apiV1CategoriesGet(authorization, page, per, postPage, postPer);
-                    Log.d(this.getClass().toString(), result.toString());
-                    return result;
-                } catch (ApiException e) {
-                    Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-            @Override
-            protected void onPostExecute(Categories categoriesResponse) {
-                super.onPostExecute(categoriesResponse);
-                mKProgressHUD.dismiss();
-                final Menu menu = mNavigationView.getMenu();
-                mCategories = categoriesResponse.getCategories();
-                for (int i = 0; i < mCategories.size(); i++) {
-                    Category category = mCategories.get(i);
-                    String title = category.getId() + " " + category.getTitle();
-                    Integer id = category.getId();
-                    menu.add(R.id.group_category, id, i, title);
-                }
-                selectMenu(0);
-                mFab.show();
-            }
-            @Override
-            protected void onCancelled() {
-                super.onCancelled();
-                mKProgressHUD.dismiss();
-            }
-        };
-        asyncTask.execute(mAuth);
+        initAdapter(new ArrayList<Post>());
+        executeCategoryAsync();
     }
 
     @Override
@@ -234,7 +179,7 @@ public class PostIndexActivity extends AppCompatActivity
                 Post post = (Post) data.getSerializableExtra("post");
                 mSelectedCategory.getPosts().add(0, post);
                 List <Post> posts = mSelectedCategory.getPosts();
-                buildAdapter(posts);
+                addArrayToAdapter(posts);
                 mList.invalidateViews();
             }
         }
@@ -254,32 +199,32 @@ public class PostIndexActivity extends AppCompatActivity
         mSelectedCategory = mCategories.get(position);
         mToolbar.setTitle(mSelectedCategory.getTitle());
         Integer categoryId = mSelectedCategory.getId();
-        buildListView(categoryId);
+        resetAdapter();
+        executePostsAsync(categoryId);
     }
 
-    private void buildListView(final Integer categoryId){
-        AsyncTask<Auth, Void, List<Post>> asyncTask = new AsyncTask<Auth, Void, List<Post>>() {
+    private void executeCategoryAsync(){
+        AsyncTask<Auth, Void, Categories> asyncTask = new AsyncTask<Auth, Void, Categories>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 mKProgressHUD.show();
             }
             @Override
-            protected List<Post> doInBackground(Auth... auth) {
+            protected Categories doInBackground(Auth... auth) {
                 String authorization = auth[0].getToken();
                 ApiClient defaultClient = Configuration.getDefaultApiClient();
                 ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
                 Bearer.setApiKey(authorization);
-                PostApi apiInstance = new PostApi();
+                CategoryApi apiInstance = new CategoryApi();
                 Integer page = 1;
-                Integer per = 20;
-                Integer commentPage = 1;
-                Integer commentPer = 0;
-                String search = null;
+                Integer per = 20; // Integer | Per page number
+                Integer postPage = 1; // Integer | Page number for Post
+                Integer postPer = 40; // Integer | Per page number For Post
                 try {
-                    Posts result = apiInstance.apiV1PostsGet(authorization, categoryId, page, per, commentPage, commentPer, search);
+                    Categories result = apiInstance.apiV1CategoriesGet(authorization, page, per, postPage, postPer);
                     Log.d(this.getClass().toString(), result.toString());
-                    return result.getPosts();
+                    return result;
                 } catch (ApiException e) {
                     Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");
                     e.printStackTrace();
@@ -287,12 +232,19 @@ public class PostIndexActivity extends AppCompatActivity
                 }
             }
             @Override
-            protected void onPostExecute(List<Post> postsResponse) {
-                super.onPostExecute(postsResponse);
+            protected void onPostExecute(Categories categoriesResponse) {
+                super.onPostExecute(categoriesResponse);
                 mKProgressHUD.dismiss();
-                getSupportActionBar().setTitle(mSelectedCategory.getTitle());
-                buildAdapter(postsResponse);
-                mSwipeRefreshLayout.setRefreshing(false);
+                final Menu menu = mNavigationView.getMenu();
+                mCategories = categoriesResponse.getCategories();
+                for (int i = 0; i < mCategories.size(); i++) {
+                    Category category = mCategories.get(i);
+                    String title = category.getId() + " " + category.getTitle();
+                    Integer id = category.getId();
+                    menu.add(R.id.group_category, id, i, title);
+                }
+                selectMenu(0);
+                mFab.show();
             }
             @Override
             protected void onCancelled() {
@@ -303,7 +255,98 @@ public class PostIndexActivity extends AppCompatActivity
         asyncTask.execute(mAuth);
     }
 
-    private void buildAdapter(final List<Post> posts){
+    private void executePostsAsync(final Integer categoryId){
+        AsyncTask<Auth, Void, Posts> asyncTask = new AsyncTask<Auth, Void, Posts>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mKProgressHUD.show();
+            }
+            @Override
+            protected Posts doInBackground(Auth... auth) {
+                String authorization = auth[0].getToken();
+                ApiClient defaultClient = Configuration.getDefaultApiClient();
+                ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
+                Bearer.setApiKey(authorization);
+                PostApi apiInstance = new PostApi();
+                Integer page = 1;
+                if(mNextPage != null){
+                    page = mNextPage;
+                }
+                if(mTotalPage != null && mTotalPage == mCurrentPage){
+                    return null;
+                }
+                Integer per = 20;
+                Integer commentPage = 1;
+                Integer commentPer = 0;
+                String search = null;
+                try {
+                    Posts result = apiInstance.apiV1PostsGet(authorization, categoryId, page, per, commentPage, commentPer, search);
+                    Log.d(this.getClass().toString(), result.toString());
+                    return result;
+                } catch (ApiException e) {
+                    Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            @Override
+            protected void onPostExecute(Posts postsResponse) {
+                super.onPostExecute(postsResponse);
+                mKProgressHUD.dismiss();
+                mSwipeRefreshLayout.setRefreshing(false);
+                if(postsResponse == null){
+                    return;
+                }
+                getSupportActionBar().setTitle(mSelectedCategory.getTitle());
+                List<Post> posts = postsResponse.getPosts();
+                if(posts != null){
+                    Pagination postsPagination = postsResponse.getPostsPagination();
+                    if(postsPagination != null){
+                        mNextPage = postsPagination.getNextPage();
+                        mCurrentPage = postsPagination.getCurrentPage();
+                        mTotalPage = postsPagination.getTotalPages();
+                    }
+                }
+                addArrayToAdapter(posts);
+            }
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+                mKProgressHUD.dismiss();
+            }
+        };
+        asyncTask.execute(mAuth);
+    }
+
+    private void resetAdapter(){
+        initPagination();
+        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
+        adapter.clear();
+        adapter.setNotifyOnChange(true);
+    }
+
+    private void addArrayToAdapter(final List<Post> posts){
+        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
+        adapter.addAll(posts);
+        adapter.setNotifyOnChange(true);
+    }
+
+    private void initPagination(){
+        mCurrentPage = 1;
+        mNextPage = null;
+        mTotalPage = null;
+    }
+
+    private void initAdapter(final List<Post> posts){
+        mLoadMore = new LoadMore(mList, new LoadMore.OnScrollListener() {
+            @Override
+            public void onLastFocus(Integer currentPage) {
+                Integer categoryId = mSelectedCategory.getId();
+                executePostsAsync(categoryId);
+            }
+        });
+        initPagination();
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -320,7 +363,7 @@ public class PostIndexActivity extends AppCompatActivity
                 }
 
                 Post post = posts.get(position);
-                holder.tv1.setText(post.getTitle());
+                holder.tv1.setText(post.getId() + ". " + post.getTitle());
                 holder.tv2.setText(post.getUser().getName());
                 String url = post.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
