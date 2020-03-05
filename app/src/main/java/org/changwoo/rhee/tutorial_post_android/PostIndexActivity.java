@@ -300,18 +300,19 @@ public class PostIndexActivity extends AppCompatActivity
                     holder.image = (ImageView) convertView.findViewById(R.id.avatar);
                     holder.tv1 = (TextView) convertView.findViewById(R.id.title);
                     holder.tv2 = (TextView) convertView.findViewById(R.id.sub_title);
+                    holder.tv3 = (TextView) convertView.findViewById(R.id.created_at);
                     convertView.setTag(holder);
                 } else {
                     holder = (ViewHolder) convertView.getTag();
                 }
 
                 Post post = posts.get(position);
-                holder.tv1.setText(post.getTitle());
+                holder.tv1.setText(post.getId() + ". " + post.getTitle());
                 holder.tv2.setText(post.getUser().getName());
+                holder.tv3.setText(Ago.build(post.getCreatedAt()));
                 String url = post.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
                         .error(R.drawable.noise).into(holder.image);
-
                 return convertView;
             }
         };
@@ -322,5 +323,6 @@ public class PostIndexActivity extends AppCompatActivity
         ImageView image;
         TextView tv1;
         TextView tv2;
+        TextView tv3;
     }
 }
