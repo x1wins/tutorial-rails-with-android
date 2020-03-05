@@ -18,15 +18,29 @@
                 android:src="@drawable/contact_picture_placeholder"
                 android:layout_margin="10px"
                 android:scaleType="centerCrop"/>
-        <TextView
-                android:id="@+id/sub_title"
-                android:text="hello world"
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="center_vertical"
-                android:textSize="15dp"
-                android:layout_margin="5px"
-                android:textStyle="bold"/>
+                android:layout_height="fill_parent">
+            <TextView
+                    android:id="@+id/sub_title"
+                    android:text="hello world"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textSize="15dp"
+                    android:layout_margin="5px"
+                    android:textStyle="bold"/>
+            <TextView
+                    android:id="@+id/created_at"
+                    android:text="hello world"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textSize="15dp"
+                    android:layout_margin="5px"
+            />
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
             android:layout_width="fill_parent"
