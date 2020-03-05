@@ -12,7 +12,6 @@
 
 package io.swagger.client.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Arrays;
 import com.google.gson.TypeAdapter;
@@ -28,9 +27,15 @@ import java.io.IOException;
  */
 
 
-public class Comment implements Serializable {
+public class Comment {
   @SerializedName("id")
   private Integer id = null;
+
+  @SerializedName("created_at")
+  private String createdAt = null;
+
+  @SerializedName("updated_at")
+  private String updatedAt = null;
 
   @SerializedName("body")
   private String body = null;
@@ -54,6 +59,42 @@ public class Comment implements Serializable {
 
   public void setId(Integer id) {
     this.id = id;
+  }
+
+  public Comment createdAt(String createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+   /**
+   * Get createdAt
+   * @return createdAt
+  **/
+  @Schema(description = "")
+  public String getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public Comment updatedAt(String updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+   /**
+   * Get updatedAt
+   * @return updatedAt
+  **/
+  @Schema(description = "")
+  public String getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(String updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
   public Comment body(String body) {
@@ -103,13 +144,15 @@ public class Comment implements Serializable {
     }
     Comment comment = (Comment) o;
     return Objects.equals(this.id, comment.id) &&
+        Objects.equals(this.createdAt, comment.createdAt) &&
+        Objects.equals(this.updatedAt, comment.updatedAt) &&
         Objects.equals(this.body, comment.body) &&
         Objects.equals(this.user, comment.user);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, body, user);
+    return Objects.hash(id, createdAt, updatedAt, body, user);
   }
 
 
@@ -119,6 +162,8 @@ public class Comment implements Serializable {
     sb.append("class Comment {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    body: ").append(toIndentedString(body)).append("\n");
     sb.append("    user: ").append(toIndentedString(user)).append("\n");
     sb.append("}");

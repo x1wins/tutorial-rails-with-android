@@ -224,12 +224,14 @@ public class PostShowActivity extends AppCompatActivity {
                     holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
                     holder.title = (TextView) convertView.findViewById(R.id.title);
                     holder.name = (TextView) convertView.findViewById(R.id.sub_title);
+                    holder.createdAt = (TextView) convertView.findViewById(R.id.created_at);
                     convertView.setTag(holder);
                 } else {
                     holder = (PostItemViewHolder) convertView.getTag();
                 }
                 holder.title.setText(post.getTitle());
                 holder.name.setText(post.getUser().getName());
+                holder.createdAt.setText(Ago.build(post.getCreatedAt()));
                 String url = post.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
                         .error(R.drawable.noise).into(holder.avatar);
@@ -260,12 +262,14 @@ public class PostShowActivity extends AppCompatActivity {
                     holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
                     holder.title = (TextView) convertView.findViewById(R.id.title);
                     holder.name = (TextView) convertView.findViewById(R.id.sub_title);
+                    holder.createdAt = (TextView) convertView.findViewById(R.id.created_at);
                     convertView.setTag(holder);
                 } else {
                     holder = (CommentItemViewHolder) convertView.getTag();
                 }
                 holder.title.setText(comment.getBody());
                 holder.name.setText(comment.getUser().getName());
+                holder.createdAt.setText(Ago.build(comment.getCreatedAt()));
                 String url = comment.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
                         .error(R.drawable.noise).into(holder.avatar);
@@ -279,6 +283,7 @@ public class PostShowActivity extends AppCompatActivity {
         ImageView avatar;
         TextView title;
         TextView name;
+        TextView createdAt;
     }
 
     private class PostDetailItemViewHolder {
@@ -289,5 +294,6 @@ public class PostShowActivity extends AppCompatActivity {
         ImageView avatar;
         TextView title;
         TextView name;
+        TextView createdAt;
     }
 }
