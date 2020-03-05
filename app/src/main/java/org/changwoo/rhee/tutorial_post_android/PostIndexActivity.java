@@ -90,8 +90,8 @@ public class PostIndexActivity extends AppCompatActivity
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                List<Post> posts = mSelectedCategory.getPosts();
-                Post post = posts.get(position);
+                ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
+                Post post = (Post)adapter.getItem(position);
                 Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
                 intent.putExtra("auth", mAuth);
                 intent.putExtra("postId", post.getId());
