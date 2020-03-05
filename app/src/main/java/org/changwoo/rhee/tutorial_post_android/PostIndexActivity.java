@@ -363,12 +363,11 @@ public class PostIndexActivity extends AppCompatActivity
                 }
 
                 Post post = posts.get(position);
-                holder.tv1.setText(post.getId() + ". " + post.getTitle());
+                holder.tv1.setText(post.getId() + ". " + post.getTitle() + Ago.build(""));
                 holder.tv2.setText(post.getUser().getName());
                 String url = post.getUser().getAvatar();
                 Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
                         .error(R.drawable.noise).into(holder.image);
-
                 return convertView;
             }
         };
