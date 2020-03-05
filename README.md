@@ -53,6 +53,8 @@ https://github.com/swagger-api/swagger-codegen/wiki/FAQ#how-can-i-generate-an-an
       -l java --library=okhttp-gson \
       -D hideGenerationTimestamp=true \
       -o /var/tmp/java/okhttp-gson/  
+      
+  cp -r /private/var/tmp/java/okhttp-gson/src/main/java/io /Users/rhee/project/Tutorial-Post-Android/app/src/main/java/
 ```   
 
 ### Troubleshooting
