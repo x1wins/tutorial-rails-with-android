@@ -6,35 +6,39 @@ TODO
 - [ ] authentication
     - [ ] save token into local from json response
     - [ ] login
-        - [ ] form
-        - [ ] http post
+        - [x] form
+        - [x] http post
+        - [ ] http error
     - [ ] join
-        - [ ] form
-        - [ ] http post
+        - [x] form
+        - [x] http post
+        - [ ] http error
     - [ ] edit
         - [ ] form
         - [ ] http put 
-    - [ ] logout
+    - [x] logout
 - [ ] category
-    - [ ] index
+    - [x] index
+    - [ ] load more
 - [ ] post
-    - [ ] index
+    - [x] index
+    - [x] load more
     - [ ] show
         - [ ] comment
-            - [ ] index
+            - [ ] reply
+            - [x] index
+            - [ ] index load more
             - [ ] form
-                - [ ] new
-                - [ ] edit
-            - [ ] create
+                - [x] new
+            - [x] create
             - [ ] update
             - [ ] destroy
-    - [ ] form
-        - [ ] new
-        - [ ] edit
-    - [ ] create
-    - [ ] update
+    - [x] form
+        - [x] new
+        - [x] edit
+    - [x] create
+    - [x] update
     - [ ] destroy
-    
     
 docker-compose run --no-deps web bundle exec rake rswag
 swagger-codegen generate -i http://localhost:3000/api-docs/v1/swagger.yaml \
