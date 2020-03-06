@@ -22,8 +22,6 @@ import io.swagger.client.model.Post;
 
 import java.util.List;
 
-import static org.changwoo.rhee.tutorial_post_android.RequestCode.POST_EDIT_REQUEST;
-
 public class PostShowActivity extends AppCompatActivity {
     private Auth mAuth;
     private Integer mPostId;
@@ -128,7 +126,7 @@ public class PostShowActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), PostEditActivity.class);
             intent.putExtra("auth", mAuth);
             intent.putExtra("post", mPost);
-            startActivityForResult(intent, POST_EDIT_REQUEST);
+            startActivityForResult(intent, RequestCode.POST_EDIT_REQUEST);
             return true;
         }
 
