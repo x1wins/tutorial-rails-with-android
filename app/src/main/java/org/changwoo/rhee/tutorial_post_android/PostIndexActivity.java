@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -178,6 +179,20 @@ public class PostIndexActivity extends AppCompatActivity
                 insertToAdapter(post);
                 startPostShowActivity(post);
             }
+        }else if (resultCode == RESULT_OK && requestCode == RequestCode.POST_SHOW_REQUEST) {
+            if (data.hasExtra("post")) {
+                Post post = (Post) data.getSerializableExtra("post");
+                ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
+                for(int i = 0; i < adapter.getCount(); i++){
+                    Post p = (Post)adapter.getItem(i);
+                    if(p.getId().intValue() == post.getId().intValue()){
+                        p.setTitle(post.getTitle());
+                        p.setBody(post.getBody());
+                        mList.invalidateViews();
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -185,7 +200,7 @@ public class PostIndexActivity extends AppCompatActivity
         Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
         intent.putExtra("auth", mAuth);
         intent.putExtra("postId", post.getId());
-        startActivity(intent);
+        startActivityForResult(intent, RequestCode.POST_SHOW_REQUEST);
     }
 
     private void buildAvatar(Auth auth){

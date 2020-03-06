@@ -133,6 +133,20 @@ public class PostShowActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == RequestCode.POST_EDIT_REQUEST) {
+            if (data.hasExtra("post")) {
+                Post post = (Post) data.getSerializableExtra("post");
+                getSupportActionBar().setTitle(post.getTitle());
+                mPost.setTitle(post.getTitle());
+                mPost.setBody(post.getBody());
+                mList.invalidateViews();
+                setResult(RESULT_OK, data);
+            }
+        }
+    }
+
     private void buildListView(final Integer postId){
         AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
             @Override
