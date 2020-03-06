@@ -28,15 +28,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:textColor="@android:color/black"
                     android:textSize="15dp"
-                    android:layout_margin="5px"
-                    android:textStyle="bold"/>
+                    android:layout_margin="5px" />
             <TextView
                     android:id="@+id/created_at"
                     android:text="hello world"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
+                    android:textColor="@android:color/black"
                     android:textSize="15dp"
                     android:layout_margin="5px"
             />
@@ -50,8 +51,8 @@
                 android:text="Hello  World Hello  World Hello  World Hello  World Hello  World Hello  World"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
                 android:textSize="20dp"
-                android:layout_margin="5px"
-                android:textStyle="bold"/>
+                android:layout_margin="5px" />
     </LinearLayout>
 </LinearLayout>
