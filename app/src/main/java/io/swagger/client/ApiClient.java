@@ -51,7 +51,8 @@ import io.swagger.client.auth.OAuth;
 
 public class ApiClient {
 
-    private String basePath = "http://10.0.2.2:3000";
+//    private String basePath = "http://10.0.2.2:3000";
+    private String basePath = "https://rhee03.ngrok.io";
     private boolean debugging = false;
     private Map<String, String> defaultHeaderMap = new HashMap<String, String>();
     private String tempFolderPath = null;
