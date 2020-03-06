@@ -92,10 +92,7 @@ public class PostIndexActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
                 Post post = (Post)adapter.getItem(position);
-                Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
-                intent.putExtra("auth", mAuth);
-                intent.putExtra("postId", post.getId());
-                startActivity(intent);
+                startPostShowActivity(post);
             }
         });
 
@@ -114,6 +111,7 @@ public class PostIndexActivity extends AppCompatActivity
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
 
+        initLoadMore();
         initAdapter(new ArrayList<Post>());
         executeCategoryAsync();
     }
@@ -177,12 +175,17 @@ public class PostIndexActivity extends AppCompatActivity
         if (resultCode == RESULT_OK && requestCode == POST_NEW_REQUEST) {
             if (data.hasExtra("post")) {
                 Post post = (Post) data.getSerializableExtra("post");
-                mSelectedCategory.getPosts().add(0, post);
-                List <Post> posts = mSelectedCategory.getPosts();
-                addArrayToAdapter(posts);
-                mList.invalidateViews();
+                insertToAdapter(post);
+                startPostShowActivity(post);
             }
         }
+    }
+
+    private void startPostShowActivity(Post post){
+        Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
+        intent.putExtra("auth", mAuth);
+        intent.putExtra("postId", post.getId());
+        startActivity(intent);
     }
 
     private void buildAvatar(Auth auth){
@@ -326,6 +329,12 @@ public class PostIndexActivity extends AppCompatActivity
         adapter.setNotifyOnChange(true);
     }
 
+    private void insertToAdapter(Post post){
+        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
+        adapter.insert(post, 0);
+        adapter.setNotifyOnChange(true);
+    }
+
     private void addArrayToAdapter(final List<Post> posts){
         ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
         adapter.addAll(posts);
@@ -338,7 +347,7 @@ public class PostIndexActivity extends AppCompatActivity
         mTotalPage = null;
     }
 
-    private void initAdapter(final List<Post> posts){
+    private void initLoadMore(){
         mLoadMore = new LoadMore(mList, new LoadMore.OnScrollListener() {
             @Override
             public void onLastFocus(Integer currentPage) {
@@ -346,6 +355,9 @@ public class PostIndexActivity extends AppCompatActivity
                 executePostsAsync(categoryId);
             }
         });
+    }
+
+    private void initAdapter(final List<Post> posts){
         initPagination();
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
