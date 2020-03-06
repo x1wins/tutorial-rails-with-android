@@ -92,10 +92,7 @@ public class PostIndexActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
                 Post post = (Post)adapter.getItem(position);
-                Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
-                intent.putExtra("auth", mAuth);
-                intent.putExtra("postId", post.getId());
-                startActivity(intent);
+                startPostShowActivity(post);
             }
         });
 
@@ -179,8 +176,16 @@ public class PostIndexActivity extends AppCompatActivity
             if (data.hasExtra("post")) {
                 Post post = (Post) data.getSerializableExtra("post");
                 insertToAdapter(post);
+                startPostShowActivity(post);
             }
         }
+    }
+
+    private void startPostShowActivity(Post post){
+        Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
+        intent.putExtra("auth", mAuth);
+        intent.putExtra("postId", post.getId());
+        startActivity(intent);
     }
 
     private void buildAvatar(Auth auth){
