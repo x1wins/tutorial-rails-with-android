@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -38,9 +37,6 @@ public class PostIndexActivity extends AppCompatActivity
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
     private ListView mList;
-    private Integer mNextPage;
-    private Integer mCurrentPage;
-    private Integer mTotalPage;
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -48,7 +44,7 @@ public class PostIndexActivity extends AppCompatActivity
     private TextView mUsername;
     private TextView mEmail;
     private KProgressHUD mKProgressHUD;
-    private LoadMore mLoadMore;
+    private ListViewHelper mListViewHelper;
     public static final int POST_FORM_REQUEST = 1;
 
     @Override
@@ -63,7 +59,7 @@ public class PostIndexActivity extends AppCompatActivity
                 public void onRefresh() {
                     Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
                     Integer categoryId = mSelectedCategory.getId();
-                    resetAdapter();
+                    mListViewHelper.resetAdapter();
                     executePostsAsync(categoryId);
                 }
             }
@@ -217,7 +213,7 @@ public class PostIndexActivity extends AppCompatActivity
         mSelectedCategory = mCategories.get(position);
         mToolbar.setTitle(mSelectedCategory.getTitle());
         Integer categoryId = mSelectedCategory.getId();
-        resetAdapter();
+        mListViewHelper.resetAdapter();
         executePostsAsync(categoryId);
     }
 
@@ -273,7 +269,13 @@ public class PostIndexActivity extends AppCompatActivity
         asyncTask.execute(mAuth);
     }
 
-    private void executePostsAsync(final Integer categoryId){
+    private void insertToAdapter(Post post){
+        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
+        adapter.insert(post, 0);
+        adapter.setNotifyOnChange(true);
+    }
+
+    private void initLoadMore(){
         AsyncTask<Auth, Void, Posts> asyncTask = new AsyncTask<Auth, Void, Posts>() {
             @Override
             protected void onPreExecute() {
@@ -287,11 +289,8 @@ public class PostIndexActivity extends AppCompatActivity
                 ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
                 Bearer.setApiKey(authorization);
                 PostApi apiInstance = new PostApi();
-                Integer page = 1;
-                if(mNextPage != null){
-                    page = mNextPage;
-                }
-                if(mTotalPage != null && mTotalPage == mCurrentPage){
+                Integer page = mListViewHelper.getNextPage();
+                if(mListViewHelper.isScrollPoisionAtLast()){
                     return null;
                 }
                 Integer per = 20;
@@ -321,12 +320,13 @@ public class PostIndexActivity extends AppCompatActivity
                 if(posts != null){
                     Pagination postsPagination = postsResponse.getPostsPagination();
                     if(postsPagination != null){
-                        mNextPage = postsPagination.getNextPage();
-                        mCurrentPage = postsPagination.getCurrentPage();
-                        mTotalPage = postsPagination.getTotalPages();
+                        Integer nextPage = postsPagination.getNextPage();
+                        Integer  currentPage = postsPagination.getCurrentPage();
+                        Integer totalPage = postsPagination.getTotalPages();
+                        mListViewHelper.setPagination(nextPage, currentPage, totalPage);
                     }
                 }
-                addArrayToAdapter(posts);
+                mListViewHelper.addArrayToAdapter(posts);
             }
             @Override
             protected void onCancelled() {
@@ -334,46 +334,16 @@ public class PostIndexActivity extends AppCompatActivity
                 mKProgressHUD.dismiss();
             }
         };
-        asyncTask.execute(mAuth);
-    }
-
-    private void resetAdapter(){
-        initPagination();
-        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
-        adapter.clear();
-        adapter.setNotifyOnChange(true);
-    }
-
-    private void insertToAdapter(Post post){
-        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
-        adapter.insert(post, 0);
-        adapter.setNotifyOnChange(true);
-    }
-
-    private void addArrayToAdapter(final List<Post> posts){
-        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
-        adapter.addAll(posts);
-        adapter.setNotifyOnChange(true);
-    }
-
-    private void initPagination(){
-        mCurrentPage = 1;
-        mNextPage = null;
-        mTotalPage = null;
-    }
-
-    private void initLoadMore(){
-        mLoadMore = new LoadMore(mList, new LoadMore.OnScrollListener() {
+        mListViewHelper = new ListViewHelper(mList, asyncTask, mAuth, new ListViewHelper.OnScrollListener() {
             @Override
             public void onLastFocus(Integer currentPage) {
                 Integer categoryId = mSelectedCategory.getId();
-                executePostsAsync(categoryId);
             }
         });
     }
 
     private void initAdapter(final List<Post> posts){
-        initPagination();
+        mListViewHelper.initPagination();
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
