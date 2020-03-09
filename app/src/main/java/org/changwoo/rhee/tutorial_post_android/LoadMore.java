@@ -28,12 +28,6 @@ public class LoadMore {
         });
     }
 
-    public void add(ListView listView, List<?> datas){
-        ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
-        adapter.addAll(datas);
-        adapter.setNotifyOnChange(true);
-    }
-
     public void resetPagination(){
         setPagination(1, null, null);
     }
@@ -63,9 +57,15 @@ public class LoadMore {
         adapter.setNotifyOnChange(true);
     }
 
-    public void insertToAdapter(ListView listView, Object data){
+    public void insert(ListView listView, Object data){
         ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
         adapter.insert(data, 0);
+        adapter.setNotifyOnChange(true);
+    }
+
+    public void add(ListView listView, List<?> datas){
+        ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
+        adapter.addAll(datas);
         adapter.setNotifyOnChange(true);
     }
 

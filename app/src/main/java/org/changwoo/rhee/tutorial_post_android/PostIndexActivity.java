@@ -172,7 +172,7 @@ public class PostIndexActivity extends AppCompatActivity
         if (resultCode == RESULT_OK && requestCode == POST_NEW_REQUEST) {
             if (data.hasExtra("post")) {
                 Post post = (Post) data.getSerializableExtra("post");
-                mLoadMore.insertToAdapter(mList, post);
+                mLoadMore.insert(mList, post);
                 startPostShowActivity(post);
             }
         }else if (resultCode == RESULT_OK && requestCode == RequestCode.POST_SHOW_REQUEST) {
