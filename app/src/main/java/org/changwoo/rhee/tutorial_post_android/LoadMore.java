@@ -56,6 +56,19 @@ public class LoadMore {
         return mTotalPage != null && mTotalPage == mCurrentPage;
     }
 
+    public void resetAdapter(ListView listView){
+        resetPagination();
+        ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
+        adapter.clear();
+        adapter.setNotifyOnChange(true);
+    }
+
+    public void insertToAdapter(ListView listView, Object data){
+        ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
+        adapter.insert(data, 0);
+        adapter.setNotifyOnChange(true);
+    }
+
     public interface OnScrollListener {
         void onLastFocus();
     }

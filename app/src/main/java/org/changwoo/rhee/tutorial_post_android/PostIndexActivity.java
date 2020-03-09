@@ -59,7 +59,7 @@ public class PostIndexActivity extends AppCompatActivity
                 public void onRefresh() {
                     Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
                     Integer categoryId = mSelectedCategory.getId();
-                    resetAdapter();
+                    mLoadMore.resetAdapter(mList);
                     executePostsAsync(categoryId);
                 }
             }
@@ -172,7 +172,7 @@ public class PostIndexActivity extends AppCompatActivity
         if (resultCode == RESULT_OK && requestCode == POST_NEW_REQUEST) {
             if (data.hasExtra("post")) {
                 Post post = (Post) data.getSerializableExtra("post");
-                insertToAdapter(post);
+                mLoadMore.insertToAdapter(mList, post);
                 startPostShowActivity(post);
             }
         }else if (resultCode == RESULT_OK && requestCode == RequestCode.POST_SHOW_REQUEST) {
@@ -213,7 +213,7 @@ public class PostIndexActivity extends AppCompatActivity
         mSelectedCategory = mCategories.get(position);
         mToolbar.setTitle(mSelectedCategory.getTitle());
         Integer categoryId = mSelectedCategory.getId();
-        resetAdapter();
+        mLoadMore.resetAdapter(mList);
         executePostsAsync(categoryId);
     }
 
@@ -329,19 +329,6 @@ public class PostIndexActivity extends AppCompatActivity
             }
         };
         asyncTask.execute(mAuth);
-    }
-
-    private void resetAdapter(){
-        mLoadMore.resetPagination();
-        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
-        adapter.clear();
-        adapter.setNotifyOnChange(true);
-    }
-
-    private void insertToAdapter(Post post){
-        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
-        adapter.insert(post, 0);
-        adapter.setNotifyOnChange(true);
     }
 
     private void initLoadMore(){
