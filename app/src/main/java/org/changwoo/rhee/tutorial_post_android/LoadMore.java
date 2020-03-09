@@ -3,7 +3,6 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import io.swagger.client.model.Post;
 
 import java.util.List;
 
@@ -21,20 +20,20 @@ public class LoadMore {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-                    onScrollListener.onLastFocus(currentPage);
+                    onScrollListener.onLastFocus();
                 }
             }
         });
     }
 
-    public void add(ListView listView, List<Post> posts){
+    public void add(ListView listView, List<?> datas){
         ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
-        adapter.addAll(posts);
+        adapter.addAll(datas);
         adapter.setNotifyOnChange(true);
         currentPage++;
     }
 
     public interface OnScrollListener {
-        void onLastFocus(Integer currentPage);
+        void onLastFocus();
     }
 }

@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -326,7 +325,7 @@ public class PostIndexActivity extends AppCompatActivity
                         mTotalPage = postsPagination.getTotalPages();
                     }
                 }
-                addArrayToAdapter(posts);
+                mLoadMore.add(mList, posts);
             }
             @Override
             protected void onCancelled() {
@@ -350,12 +349,6 @@ public class PostIndexActivity extends AppCompatActivity
         adapter.setNotifyOnChange(true);
     }
 
-    private void addArrayToAdapter(final List<Post> posts){
-        ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
-        adapter.addAll(posts);
-        adapter.setNotifyOnChange(true);
-    }
-
     private void initPagination(){
         mCurrentPage = 1;
         mNextPage = null;
@@ -365,7 +358,7 @@ public class PostIndexActivity extends AppCompatActivity
     private void initLoadMore(){
         mLoadMore = new LoadMore(mList, new LoadMore.OnScrollListener() {
             @Override
-            public void onLastFocus(Integer currentPage) {
+            public void onLastFocus() {
                 Integer categoryId = mSelectedCategory.getId();
                 executePostsAsync(categoryId);
             }
