@@ -37,9 +37,6 @@ public class PostIndexActivity extends AppCompatActivity
     private Auth mAuth;
     private MenuItem mPreviousMenuItem;
     private ListView mList;
-    private Integer mNextPage;
-    private Integer mCurrentPage;
-    private Integer mTotalPage;
     private List<Category> mCategories;
     private Category mSelectedCategory;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -286,11 +283,8 @@ public class PostIndexActivity extends AppCompatActivity
                 ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
                 Bearer.setApiKey(authorization);
                 PostApi apiInstance = new PostApi();
-                Integer page = 1;
-                if(mNextPage != null){
-                    page = mNextPage;
-                }
-                if(mTotalPage != null && mTotalPage == mCurrentPage){
+                Integer page = mLoadMore.getNextPage();
+                if(!mLoadMore.hasNextPage()){
                     return null;
                 }
                 Integer per = 20;
@@ -320,9 +314,10 @@ public class PostIndexActivity extends AppCompatActivity
                 if(posts != null){
                     Pagination postsPagination = postsResponse.getPostsPagination();
                     if(postsPagination != null){
-                        mNextPage = postsPagination.getNextPage();
-                        mCurrentPage = postsPagination.getCurrentPage();
-                        mTotalPage = postsPagination.getTotalPages();
+                        Integer currentPage = postsPagination.getCurrentPage();
+                        Integer nextPage = postsPagination.getNextPage();
+                        Integer totalPage = postsPagination.getTotalPages();
+                        mLoadMore.setPagination(currentPage, nextPage, totalPage);
                     }
                 }
                 mLoadMore.add(mList, posts);
@@ -337,7 +332,7 @@ public class PostIndexActivity extends AppCompatActivity
     }
 
     private void resetAdapter(){
-        initPagination();
+        mLoadMore.resetPagination();
         ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
         adapter.clear();
         adapter.setNotifyOnChange(true);
@@ -347,12 +342,6 @@ public class PostIndexActivity extends AppCompatActivity
         ArrayAdapter adapter = (ArrayAdapter)mList.getAdapter();
         adapter.insert(post, 0);
         adapter.setNotifyOnChange(true);
-    }
-
-    private void initPagination(){
-        mCurrentPage = 1;
-        mNextPage = null;
-        mTotalPage = null;
     }
 
     private void initLoadMore(){
@@ -366,7 +355,7 @@ public class PostIndexActivity extends AppCompatActivity
     }
 
     private void initAdapter(final List<Post> posts){
-        initPagination();
+        mLoadMore.resetPagination();
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0, posts) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {

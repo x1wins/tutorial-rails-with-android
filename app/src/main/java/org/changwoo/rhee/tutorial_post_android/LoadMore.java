@@ -9,9 +9,11 @@ import java.util.List;
 public class LoadMore {
     private boolean lastItemVisibleFlag;
     private LoadMore(){ }
-    private Integer currentPage;
+    private Integer mCurrentPage;
+    private Integer mNextPage;
+    private Integer mTotalPage;
     public LoadMore(ListView listView, final OnScrollListener onScrollListener){
-        currentPage = 1;
+        mCurrentPage = 1;
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -30,7 +32,32 @@ public class LoadMore {
         ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
         adapter.addAll(datas);
         adapter.setNotifyOnChange(true);
-        currentPage++;
+        mCurrentPage++;
+    }
+
+    public void resetPagination(){
+        setPagination(1, null, null);
+    }
+
+    public void setPagination(Integer currentPage, Integer nextPage, Integer totalPage){
+        mCurrentPage = currentPage;
+        mNextPage = nextPage;
+        mTotalPage = totalPage;
+    }
+
+    public Integer getNextPage(){
+        Integer page = 1;
+        if(mNextPage != null){
+            page = mNextPage;
+        }
+        return page;
+    }
+
+    public boolean hasNextPage(){
+        if(mTotalPage != null && mTotalPage == mCurrentPage){
+            return false;
+        }
+        return true;
     }
 
     public interface OnScrollListener {
