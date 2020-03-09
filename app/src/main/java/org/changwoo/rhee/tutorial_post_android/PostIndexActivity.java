@@ -284,7 +284,7 @@ public class PostIndexActivity extends AppCompatActivity
                 Bearer.setApiKey(authorization);
                 PostApi apiInstance = new PostApi();
                 Integer page = mLoadMore.getNextPage();
-                if(!mLoadMore.hasNextPage()){
+                if(mLoadMore.hasNotNextPage()){
                     return null;
                 }
                 Integer per = 20;

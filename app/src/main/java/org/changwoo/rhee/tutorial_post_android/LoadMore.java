@@ -52,11 +52,8 @@ public class LoadMore {
         return page;
     }
 
-    public boolean hasNextPage(){
-        if(mTotalPage != null && mTotalPage == mCurrentPage){
-            return false;
-        }
-        return true;
+    public boolean hasNotNextPage(){
+        return mTotalPage != null && mTotalPage == mCurrentPage;
     }
 
     public interface OnScrollListener {
