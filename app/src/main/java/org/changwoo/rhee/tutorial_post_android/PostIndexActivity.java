@@ -334,7 +334,7 @@ public class PostIndexActivity extends AppCompatActivity
     private void initLoadMore(){
         mLoadMore = new LoadMore(mList, new LoadMore.OnScrollListener() {
             @Override
-            public void onLastFocus() {
+            public void onFocusAtLastItem() {
                 Integer categoryId = mSelectedCategory.getId();
                 executePostsAsync(categoryId);
             }

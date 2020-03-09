@@ -22,7 +22,7 @@ public class LoadMore {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-                    onScrollListener.onLastFocus();
+                    onScrollListener.onFocusAtLastItem();
                 }
             }
         });
@@ -70,6 +70,6 @@ public class LoadMore {
     }
 
     public interface OnScrollListener {
-        void onLastFocus();
+        void onFocusAtLastItem();
     }
 }
