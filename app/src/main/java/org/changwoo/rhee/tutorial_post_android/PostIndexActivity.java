@@ -293,7 +293,7 @@ public class PostIndexActivity extends AppCompatActivity
                 String search = null;
                 try {
                     Posts result = apiInstance.apiV1PostsGet(authorization, categoryId, page, per, commentPage, commentPer, search);
-                    Log.d(this.getClass().toString(), result.toString());
+                    Log.d(this.getClass().toString(), result.toString() + "number page " + page);
                     return result;
                 } catch (ApiException e) {
                     Log.d(this.getClass().toString(),"Exception when calling CategoryApi#apiV1CategoriesGet");

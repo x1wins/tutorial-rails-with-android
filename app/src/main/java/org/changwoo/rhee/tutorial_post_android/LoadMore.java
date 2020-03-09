@@ -32,7 +32,6 @@ public class LoadMore {
         ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
         adapter.addAll(datas);
         adapter.setNotifyOnChange(true);
-        mCurrentPage++;
     }
 
     public void resetPagination(){
