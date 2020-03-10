@@ -18,6 +18,7 @@ import io.swagger.client.api.PostApi;
 import io.swagger.client.auth.ApiKeyAuth;
 import io.swagger.client.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostShowActivity extends AppCompatActivity {
@@ -49,6 +50,7 @@ public class PostShowActivity extends AppCompatActivity {
                     @Override
                     public void onRefresh() {
                         Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
+                        mPost.getComments().clear();
                         mLoadMore.resetAdapter(mList);
                         executePostAsync(mPostId);
                     }
@@ -212,11 +214,13 @@ public class PostShowActivity extends AppCompatActivity {
                 if(postResponse == null){
                     return;
                 }
-                mPost = postResponse;
                 invalidateOptionsMenu();
+                mPost.setTitle(postResponse.getTitle());
+                mPost.setBody(postResponse.getBody());
                 getSupportActionBar().setTitle(mPost.getTitle());
                 List<Comment> comments = postResponse.getComments();
                 if(comments != null){
+                    mPost.getComments().addAll(comments);
                     Pagination commentsPagination = postResponse.getCommentsPagination();
                     if(commentsPagination != null){
                         Integer currentPage = commentsPagination.getCurrentPage();
@@ -225,7 +229,7 @@ public class PostShowActivity extends AppCompatActivity {
                         mLoadMore.setPagination(currentPage, nextPage, totalPage);
                     }
                 }
-                mLoadMore.add(mList, comments);
+                mLoadMore.add(mList, new ArrayList<Comment>());
             }
             @Override
             protected void onCancelled() {
@@ -290,15 +294,10 @@ public class PostShowActivity extends AppCompatActivity {
                 }
                 holder.title.setText(mPost.getTitle());
                 User user = mPost.getUser();
-                if(user != null){
-                    holder.name.setText(user.getName());
-                    String url = user.getAvatar();
-                    Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
-                            .error(R.drawable.noise).into(holder.avatar);
-                }
-                if(mPost.getCreatedAt() != null){
-                    holder.createdAt.setText(Ago.build(mPost.getCreatedAt()));
-                }
+                holder.name.setText(user.getName());
+                String url = user.getAvatar();
+                Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder).error(R.drawable.noise).into(holder.avatar);
+                holder.createdAt.setText(Ago.build(mPost.getCreatedAt()));
                 return convertView;
             }
 
