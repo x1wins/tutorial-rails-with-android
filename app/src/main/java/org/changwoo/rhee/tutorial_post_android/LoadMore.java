@@ -3,16 +3,17 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import io.swagger.client.model.Post;
 
 import java.util.List;
 
 public class LoadMore {
     private boolean lastItemVisibleFlag;
     private LoadMore(){ }
-    private Integer currentPage;
+    private Integer mCurrentPage;
+    private Integer mNextPage;
+    private Integer mTotalPage;
     public LoadMore(ListView listView, final OnScrollListener onScrollListener){
-        currentPage = 1;
+        mCurrentPage = 1;
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -21,20 +22,54 @@ public class LoadMore {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lastItemVisibleFlag) {
-                    onScrollListener.onLastFocus(currentPage);
+                    onScrollListener.onFocusAtLastItem();
                 }
             }
         });
     }
 
-    public void add(ListView listView, List<Post> posts){
+    public void resetPagination(){
+        setPagination(1, null, null);
+    }
+
+    public void setPagination(Integer currentPage, Integer nextPage, Integer totalPage){
+        mCurrentPage = currentPage;
+        mNextPage = nextPage;
+        mTotalPage = totalPage;
+    }
+
+    public Integer getNextPage(){
+        Integer page = 1;
+        if(mNextPage != null){
+            page = mNextPage;
+        }
+        return page;
+    }
+
+    public boolean hasNotNextPage(){
+        return mTotalPage != null && mTotalPage == mCurrentPage;
+    }
+
+    public void resetAdapter(ListView listView){
+        resetPagination();
         ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
-        adapter.addAll(posts);
+        adapter.clear();
         adapter.setNotifyOnChange(true);
-        currentPage++;
+    }
+
+    public void insert(ListView listView, Object data){
+        ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
+        adapter.insert(data, 0);
+        adapter.setNotifyOnChange(true);
+    }
+
+    public void add(ListView listView, List<?> datas){
+        ArrayAdapter adapter = (ArrayAdapter)listView.getAdapter();
+        adapter.addAll(datas);
+        adapter.setNotifyOnChange(true);
     }
 
     public interface OnScrollListener {
-        void onLastFocus(Integer currentPage);
+        void onFocusAtLastItem();
     }
 }
