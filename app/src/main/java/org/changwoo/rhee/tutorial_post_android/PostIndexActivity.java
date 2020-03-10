@@ -195,6 +195,7 @@ public class PostIndexActivity extends AppCompatActivity
     private void startPostShowActivity(Post post){
         Intent intent = new Intent(getApplicationContext(), PostShowActivity.class);
         intent.putExtra("auth", mAuth);
+        intent.putExtra("post", post);
         intent.putExtra("postId", post.getId());
         startActivityForResult(intent, RequestCode.POST_SHOW_REQUEST);
     }

@@ -3,6 +3,7 @@ package org.changwoo.rhee.tutorial_post_android;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.*;
@@ -15,10 +16,7 @@ import io.swagger.client.Configuration;
 import io.swagger.client.api.CommentApi;
 import io.swagger.client.api.PostApi;
 import io.swagger.client.auth.ApiKeyAuth;
-import io.swagger.client.model.Auth;
-import io.swagger.client.model.Comment;
-import io.swagger.client.model.CommentParam;
-import io.swagger.client.model.Post;
+import io.swagger.client.model.*;
 
 import java.util.List;
 
@@ -29,18 +27,33 @@ public class PostShowActivity extends AppCompatActivity {
     private ListView mList;
     private EditText mEditText;
     private Button mButton;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private KProgressHUD mKProgressHUD;
+    private LoadMore mLoadMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_show);
         mAuth = (Auth) getIntent().getSerializableExtra("auth");
+        mPost = (Post) getIntent().getSerializableExtra("post");
         mPostId = getIntent().getIntExtra("postId", 0);
         mList = (ListView)findViewById(R.id.post_show_list);
         mEditText = (EditText) findViewById(R.id.edittext_chatbox);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mButton = (Button) findViewById(R.id.button_chatbox_send);
+        getSupportActionBar().setTitle(mPost.getTitle());
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i(this.getClass().toString(), "onRefresh called from SwipeRefreshLayout");
+                        mLoadMore.resetAdapter(mList);
+                        executePostAsync(mPostId);
+                    }
+                }
+        );
         mKProgressHUD = KProgressHUD.create(this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setLabel("Please wait")
@@ -48,7 +61,56 @@ public class PostShowActivity extends AppCompatActivity {
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
-        buildListView(mPostId);
+        initCommentSendButton();
+        initLoadMore();
+        initAdapter();
+        executePostAsync(mPostId);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        String email = mAuth.getEmail();
+        if(mPost !=null && Owner.is(email, mPost)){
+            getMenuInflater().inflate(R.menu.show, menu);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_edit) {
+            Intent intent = new Intent(getApplicationContext(), PostEditActivity.class);
+            intent.putExtra("auth", mAuth);
+            intent.putExtra("post", mPost);
+            startActivityForResult(intent, RequestCode.POST_EDIT_REQUEST);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == RequestCode.POST_EDIT_REQUEST) {
+            if (data.hasExtra("post")) {
+                Post post = (Post) data.getSerializableExtra("post");
+                getSupportActionBar().setTitle(post.getTitle());
+                mPost.setTitle(post.getTitle());
+                mPost.setBody(post.getBody());
+                mList.invalidateViews();
+                setResult(RESULT_OK, data);
+            }
+        }
+    }
+
+    private void initCommentSendButton(){
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,50 +166,17 @@ public class PostShowActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        String email = mAuth.getEmail();
-        if(mPost !=null && Owner.is(email, mPost)){
-            getMenuInflater().inflate(R.menu.show, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_edit) {
-            Intent intent = new Intent(getApplicationContext(), PostEditActivity.class);
-            intent.putExtra("auth", mAuth);
-            intent.putExtra("post", mPost);
-            startActivityForResult(intent, RequestCode.POST_EDIT_REQUEST);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == RequestCode.POST_EDIT_REQUEST) {
-            if (data.hasExtra("post")) {
-                Post post = (Post) data.getSerializableExtra("post");
-                getSupportActionBar().setTitle(post.getTitle());
-                mPost.setTitle(post.getTitle());
-                mPost.setBody(post.getBody());
-                mList.invalidateViews();
-                setResult(RESULT_OK, data);
+    private void initLoadMore(){
+        mLoadMore = new LoadMore(mList, new LoadMore.OnScrollListener() {
+            @Override
+            public void onFocusAtLastItem() {
+                Integer postId = mPostId;
+                executePostAsync(postId);
             }
-        }
+        });
     }
 
-    private void buildListView(final Integer postId){
+    private void executePostAsync(final Integer postId){
         AsyncTask<Auth, Void, Post> asyncTask = new AsyncTask<Auth, Void, Post>() {
             @Override
             protected void onPreExecute() {
@@ -160,8 +189,11 @@ public class PostShowActivity extends AppCompatActivity {
                 ApiKeyAuth Bearer = (ApiKeyAuth) defaultClient.getAuthentication("Bearer");
                 Bearer.setApiKey(authorization);
                 PostApi apiInstance = new PostApi();
-                Integer commentPage = 1;
+                Integer commentPage = mLoadMore.getNextPage();
                 Integer commentPer = 10;
+                if(mLoadMore.hasNotNextPage()){
+                    return null;
+                }
                 try {
                     Post result = apiInstance.apiV1PostsIdGet(String.valueOf(postId), authorization, commentPage, commentPer);
                     Log.d(this.getClass().toString(), result.toString());
@@ -176,10 +208,24 @@ public class PostShowActivity extends AppCompatActivity {
             protected void onPostExecute(Post postResponse) {
                 super.onPostExecute(postResponse);
                 mKProgressHUD.dismiss();
+                mSwipeRefreshLayout.setRefreshing(false);
+                if(postResponse == null){
+                    return;
+                }
                 mPost = postResponse;
                 invalidateOptionsMenu();
                 getSupportActionBar().setTitle(mPost.getTitle());
-                buildAdapter(mPost);
+                List<Comment> comments = postResponse.getComments();
+                if(comments != null){
+                    Pagination commentsPagination = postResponse.getCommentsPagination();
+                    if(commentsPagination != null){
+                        Integer currentPage = commentsPagination.getCurrentPage();
+                        Integer nextPage = commentsPagination.getNextPage();
+                        Integer totalPage = commentsPagination.getTotalPages();
+                        mLoadMore.setPagination(currentPage, nextPage, totalPage);
+                    }
+                }
+                mLoadMore.add(mList, comments);
             }
             @Override
             protected void onCancelled() {
@@ -190,12 +236,13 @@ public class PostShowActivity extends AppCompatActivity {
         asyncTask.execute(mAuth);
     }
 
-    private void buildAdapter(final Post post){
+    private void initAdapter(){
+        mLoadMore.resetPagination();
         ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), 0) {
             @Override
             public int getCount() {
                 int count = 0;
-                List<Comment> comments = post.getComments();
+                List<Comment> comments = mPost.getComments();
                 if(comments != null){
                     count = comments.size();
                 }
@@ -241,12 +288,17 @@ public class PostShowActivity extends AppCompatActivity {
                 } else {
                     holder = (PostItemViewHolder) convertView.getTag();
                 }
-                holder.title.setText(post.getTitle());
-                holder.name.setText(post.getUser().getName());
-                holder.createdAt.setText(Ago.build(post.getCreatedAt()));
-                String url = post.getUser().getAvatar();
-                Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
-                        .error(R.drawable.noise).into(holder.avatar);
+                holder.title.setText(mPost.getTitle());
+                User user = mPost.getUser();
+                if(user != null){
+                    holder.name.setText(user.getName());
+                    String url = user.getAvatar();
+                    Picasso.get().load(url).placeholder(R.drawable.contact_picture_placeholder)
+                            .error(R.drawable.noise).into(holder.avatar);
+                }
+                if(mPost.getCreatedAt() != null){
+                    holder.createdAt.setText(Ago.build(mPost.getCreatedAt()));
+                }
                 return convertView;
             }
 
@@ -260,13 +312,13 @@ public class PostShowActivity extends AppCompatActivity {
                 } else {
                     holder = (PostDetailItemViewHolder) convertView.getTag();
                 }
-                holder.content.setText(post.getBody());
+                holder.content.setText(mPost.getBody());
                 return convertView;
             }
 
             private View recycleCommentItemConvertView(int position, View convertView, ViewGroup parent){
                 CommentItemViewHolder holder;
-                List<Comment> comments = post.getComments();
+                List<Comment> comments = mPost.getComments();
                 Comment comment = comments.get(position-2);
                 if(convertView == null) {
                     convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.comment_item, parent, false);
